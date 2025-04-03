@@ -192,6 +192,11 @@ function showNotification(message) {
   }
 }
 
+// Redirect to home function
+function redirectToHome() {
+  window.location.href = "index.html"; // Ganti dengan URL halaman home Anda jika berbeda
+}
+
 // Event listeners
 navbarUsername?.addEventListener("click", function (e) {
   e.stopPropagation();
@@ -268,10 +273,12 @@ createAccountForm?.addEventListener("submit", function (e) {
   localStorage.setItem("currentUser", JSON.stringify(currentUser));
   updateNavbarUsername();
   this.reset();
-  document.querySelector(".back-to-login").click();
 
   applyDiscounts();
   showNotification("Akun berhasil dibuat! Anda mendapatkan diskon 20%");
+  
+  // Redirect to home after successful registration
+  redirectToHome();
 });
 
 // Forgot password
