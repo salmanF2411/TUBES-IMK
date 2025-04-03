@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Primary Meta Tags -->
+    <title>Explore All Shoes | Shoe Bazaar</title>
+
+    <!-- link ke css -->
+    <link rel="stylesheet" href="assets/css/style.css" />
+
+    <!-- link ke icons -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+
+    <!-- fav icons -->
+    <link
+      rel="shortcut icon"
+      href="assets/images/favicon.ico"
+      type="image/x-icon"
+    />
+  </head>
+
+  <body>
+    <!-- header -->
+    <header>
+      <div class="nav container">
+        <div class="menu-icon" aria-label="Toggle Navigation Menu">
+          <div class="line1"></div>
+          <div class="line2"></div>
+          <div class="line3"></div>
+        </div>
+        <ul class="navbar" role="navigation">
+          <li><a href="index.html" title="Go To home">Home</a></li>
+          <li><a href="#category" title="Go To home">Category</a></li>
+          <li><a href="#popular" title="Go To home">Popular</a></li>
+          <li><a href="#about" title="Go To home">About</a></li>
+          <li><a href="#products" title="Go To home">Products</a></li>
+          <li><a href="contact.html" title="Go To home">Contact Us</a></li>
+        </ul>
+        <a href="#" class="logo" title="Shoe Bazzar">
+          Hype<span>Kicks</span>
+        </a>
+
+        <div class="search-container">
+          <input
+            type="text"
+            id="search"
+            placeholder="Search..."
+            aria-label="Search"
+          />
+          <button id="search-btn" title="Search">
+            <i class="ri-search-line"></i>
+          </button>
+        </div>
+
+        <div class="nav-icons">
+          <i
+            class="ri-shopping-cart-line"
+            id="cart-icon"
+            title="view Shopping"
+            aria-label="Shopping Cart"
+          ></i>
+          <i
+            class="ri-user-line"
+            id="user-icon"
+            title="User Account"
+            aria-label="User Account"
+          ></i>
+        </div>
+
+        <div class="cart">
+          <div class="cart-content">
+            <div class="cart-box">
+              <img src="assets/images/Product-10.png" alt="Nike Shoe" />
+              <div class="cart-text">
+                <h3>Nike Shoe</h3>
+                <span>Rp. 5000</span>
+                <span>1</span>
+              </div>
+              <i
+                class="ri-delete-bin-line"
+                title="remove item"
+                aria-label="delete Item"
+              ></i>
+            </div>
+            <div class="cart-box">
+              <img src="assets/images/Product-13.png" alt="Nike Shoe" />
+              <div class="cart-text">
+                <h3>Nike Shoe</h3>
+                <span>Rp. 5000</span>
+                <span>1</span>
+              </div>
+              <i
+                class="ri-delete-bin-line"
+                title="remove item"
+                aria-label="delete Item"
+              ></i>
+            </div>
+
+            <div class="total">
+              <h3>2 Items</h3>
+              <span>Total Rp. 15000</span>
+            </div>
+            <a href="#" class="btn" title="Bayar"> Bayar</a>
+          </div>
+        </div>
+
+        <div class="user-name-container" style="display: none">
+          <div class="name-dropdown">
+            <span class="user-name" id="navbarUsername"></span>
+            <div class="dropdown-content">
+              <a href="#" id="logoutBtn">
+                <i class="ri-logout-box-r-line"></i> Logout
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Login Forms Container -->
+        <div class="login-form">
+          <!-- Main Login Form -->
+          <form id="loginForm" class="form-container active">
+            <h2>Login To Continue</h2>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter Your Email"
+              required
+              aria-label="Email"
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter Your Password"
+              required
+              aria-label="Password"
+            />
+
+            <a
+              href="#"
+              class="forgot-password-link"
+              title="Recover Your Password"
+            >
+              Forgot Password?
+            </a>
+
+            <input type="submit" value="Login" class="btn" />
+
+            <a
+              href="#"
+              class="create-account-link"
+              title="Create a new Account"
+            >
+              Create Account
+            </a>
+          </form>
+
+          <!-- Forgot Password Form -->
+          <form id="forgotPasswordForm" class="form-container">
+            <h2>Forgot Password</h2>
+            <p>Enter your email to receive a password reset link</p>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter Your Email"
+              required
+              aria-label="Email"
+            />
+            <input type="submit" value="Submit" class="btn" />
+            <a href="#" class="back-to-login" title="Back to Login">
+              Back to Login
+            </a>
+          </form>
+
+          <!-- Reset Password Form -->
+          <form id="resetPasswordForm" class="form-container">
+            <h2>Reset Password</h2>
+            <input
+              type="password"
+              name="new-password"
+              placeholder="Enter New Password"
+              required
+              aria-label="New Password"
+            />
+            <input
+              type="password"
+              name="confirm-new-password"
+              placeholder="Confirm New Password"
+              required
+              aria-label="Confirm Password"
+            />
+            <input type="submit" value="Reset Password" class="btn" />
+            <a href="#" class="back-to-login" title="Back to Login">
+              Back to Login
+            </a>
+          </form>
+
+          <!-- Create Account Form -->
+          <form id="createAccountForm" class="form-container">
+            <h2>Create Account</h2>
+            <input
+              type="text"
+              name="name"
+              placeholder="Enter Your Name"
+              required
+              aria-label="Name"
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter Your Email"
+              required
+              aria-label="Email"
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter Your Password"
+              required
+              aria-label="Password"
+            />
+            <input
+              type="password"
+              name="confirm-password"
+              placeholder="Confirm Your Password"
+              required
+              aria-label="Confirm Password"
+            />
+            <input type="submit" value="Sign Up" class="btn" />
+            <a href="#" class="back-to-login" title="Back to Login">
+              Already have an account? Login
+            </a>
+          </form>
+        </div>
+      </div>
+    </header>
+    <!-- header end -->
+
+    <!-- product -->
+    <section class="products container" id="products" style="margin-top: 3rem">
+      <div class="heading">
+        <h1>Product shop</h1>
+        <!-- <a href="/products.html" title="View All Product">See All</a> -->
+      </div>
+
+      <div class="products-content">
+        <div onclick="window.location.href='productDetail.html';" class="box">
+          <img src="assets/images/product-1.png" alt="Sport" />
+          <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
+
+          <div class="box-text">
+            <div class="title-price">
+              <h3>Adidas Samba</h3>
+              <span>Rp. 15.000</span>
+              <div class="stars">
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-line"></i>
+                <span>(24)</span>
+              </div>
+            </div>
+            <a href="#" title="Add to Cart">
+              <i class="ri-shopping-cart-line"></i>
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <img src="assets/images/product-1.png" alt="Sport" />
+          <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
+
+          <div class="box-text">
+            <div class="title-price">
+              <h3>Adidas mambo</h3>
+              <span>Rp. 15.000</span>
+              <div class="stars">
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <span>(15)</span>
+              </div>
+            </div>
+            <a href="#" title="Add to Cart">
+              <i class="ri-shopping-cart-line"></i>
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <img src="assets/images/product-1.png" alt="Sport" />
+          <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
+
+          <div class="box-text">
+            <div class="title-price">
+              <h3>nike jordan</h3>
+              <span>Rp. 15.000</span>
+              <div class="stars">
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <span>(42)</span>
+              </div>
+            </div>
+            <a href="#" title="Add to Cart">
+              <i class="ri-shopping-cart-line"></i>
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <img src="assets/images/product-1.png" alt="Sport" />
+          <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
+
+          <div class="box-text">
+            <div class="title-price">
+              <h3>nike adidas</h3>
+              <span>Rp. 15.000</span>
+              <div class="stars">
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-half-line"></i>
+                <span>(37)</span>
+              </div>
+            </div>
+            <a href="#" title="Add to Cart">
+              <i class="ri-shopping-cart-line"></i>
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <img src="assets/images/product-1.png" alt="Sport" />
+          <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
+
+          <div class="box-text">
+            <div class="title-price">
+              <h3>Adidas jordan</h3>
+              <span>Rp. 15.000</span>
+              <div class="stars">
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <span>(8)</span>
+              </div>
+            </div>
+            <a href="#" title="Add to Cart">
+              <i class="ri-shopping-cart-line"></i>
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <img src="assets/images/product-1.png" alt="Sport" />
+          <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
+
+          <div class="box-text">
+            <div class="title-price">
+              <h3>Sport Shoes</h3>
+              <span>Rp. 15.000</span>
+              <div class="stars">
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <span>(19)</span>
+              </div>
+            </div>
+            <a href="#" title="Add to Cart">
+              <i class="ri-shopping-cart-line"></i>
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <img src="assets/images/product-1.png" alt="Sport" />
+          <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
+
+          <div class="box-text">
+            <div class="title-price">
+              <h3>Sport Shoes</h3>
+              <span>Rp. 15.000</span>
+              <div class="stars">
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-line"></i>
+                <span>(27)</span>
+              </div>
+            </div>
+            <a href="#" title="Add to Cart">
+              <i class="ri-shopping-cart-line"></i>
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <img src="assets/images/product-1.png" alt="Sport" />
+          <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
+
+          <div class="box-text">
+            <div class="title-price">
+              <h3>Sport Shoes</h3>
+              <span>Rp. 15.000</span>
+              <div class="stars">
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-half-line"></i>
+                <span>(33)</span>
+              </div>
+            </div>
+            <a href="#" title="Add to Cart">
+              <i class="ri-shopping-cart-line"></i>
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <img src="assets/images/product-1.png" alt="Sport" />
+          <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
+
+          <div class="box-text">
+            <div class="title-price">
+              <h3>Sport Shoes</h3>
+              <span>Rp. 15.000</span>
+              <div class="stars">
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <span>(11)</span>
+              </div>
+            </div>
+            <a href="#" title="Add to Cart">
+              <i class="ri-shopping-cart-line"></i>
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <img src="assets/images/product-1.png" alt="Sport" />
+          <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
+
+          <div class="box-text">
+            <div class="title-price">
+              <h3>Sport Shoes</h3>
+              <span>Rp. 15.000</span>
+              <div class="stars">
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <span>(48)</span>
+              </div>
+            </div>
+            <a href="#" title="Add to Cart">
+              <i class="ri-shopping-cart-line"></i>
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <img src="assets/images/product-1.png" alt="Sport" />
+          <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
+
+          <div class="box-text">
+            <div class="title-price">
+              <h3>Sport Shoes</h3>
+              <span>Rp. 15.000</span>
+              <div class="stars">
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-line"></i>
+                <i class="ri-star-line"></i>
+                <span>(16)</span>
+              </div>
+            </div>
+            <a href="#" title="Add to Cart">
+              <i class="ri-shopping-cart-line"></i>
+            </a>
+          </div>
+        </div>
+        <div class="box">
+          <img src="assets/images/product-1.png" alt="Sport" />
+          <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
+
+          <div class="box-text">
+            <div class="title-price">
+              <h3>Sport Shoes</h3>
+              <span>Rp. 15.000</span>
+              <div class="stars">
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-fill"></i>
+                <i class="ri-star-half-line"></i>
+                <span>(29)</span>
+              </div>
+            </div>
+            <a href="#" title="Add to Cart">
+              <i class="ri-shopping-cart-line"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- product end -->
+    <div
+      id="no-results-message"
+      style="
+        display: none;
+        grid-column: 1/-1;
+        text-align: center;
+        padding: 2rem;
+      "
+    >
+      No products found matching your search.
+    </div>
+
+    <!-- newsletter -->
+    <section class="newsletter">
+      <div class="newsletter-content container">
+        <div class="newsletter-text">
+          <h2>Sign Up for exclusive</h2>
+          <p>Disc 20% for exclusive</p>
+        </div>
+      </div>
+    </section>
+    <!-- newsletter end -->
+
+    <!-- Footer -->
+    <section class="footer container">
+      <div class="footer-box">
+        <h3>Our Company</h3>
+        <a href="about.html" title="Lihat lebih">About Us</a>
+        <a href="help.html" title="Lihat lebih">Help Center</a>
+        <a href="blog.html" title="Lihat lebih">Our Blog</a>
+        <a href="privacy-policy.html" title="Lihat lebih">privacy policy</a>
+      </div>
+
+      <div class="footer-box">
+        <h3>Popular categories</h3>
+        <a href="#" title="Shop Sneakers">Sneakers</a>
+        <a href="#" title="Shop Sneakers">Sneakers</a>
+        <a href="#" title="Shop Sneakers">Sneakers</a>
+        <a href="#" title="Shop Sneakers">Sneakers</a>
+      </div>
+
+      <div class="footer-box">
+        <h3>more information</h3>
+        <a href="shipping-Details.html" title="Lear About">shipping Details</a>
+        <a href="shipping-Details.html" title="Lear About"
+          >Delivery and Returns</a
+        >
+        <a href="shipping-Details.html" title="Lear About">Contact Us</a>
+        <a href="shipping-Details.html" title="Lear About">Sitemap</a>
+      </div>
+
+      <div class="footer-box">
+        <h3>Connect With Us</h3>
+        <div class="social">
+          <a href="#" target="_blank" title="Follow us on Facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a href="#" target="_blank" title="Follow us on Twitter">
+            <i class="ri-twitter-x-line"></i>
+          </a>
+          <a href="#" target="_blank" title="Follow us on Instagram">
+            <i class="ri-instagram-fill"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+    <!-- Footer end-->
+
+    <!-- copyright -->
+    <div class="copyright">
+      <p>&#169; Toko Sepatu All Right Reserved</p>
+    </div>
+    <!-- copyright end -->
+
+    <!-- scrol top -->
+    <button class="scroll-top"><i class="ri-arrow-up-line"></i></button>
+
+    <!-- js -->
+    <script src="assets/js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  </body>
+</html>
