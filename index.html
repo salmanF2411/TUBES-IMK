@@ -107,40 +107,132 @@
 
         <div class="cart">
           <div class="cart-content">
-            <div class="cart-box">
-              <img src="assets/images/Product-10.png" alt="Nike Shoe" />
-              <div class="cart-text">
-                <h3>Nike Shoe</h3>
-                <span>Rp. 5000</span>
-                <span>1</span>
+            <div class="cart-header">
+              <i class="ri-close-line close-cart" title="Close cart" aria-label="Close cart"></i>
+              <h3 class="cart-title">Your Cart</h3>
+            </div>
+            
+            <div class="cart-items-container">
+              <!-- Cart items will be inserted here -->
+            </div>
+            
+            <div class="cart-footer">
+              <div class="total">
+                <h3>2 Items</h3>
+                <span>Total Rp. 15000</span>
               </div>
-              <i
-                class="ri-delete-bin-line"
-                title="remove item"
-                aria-label="delete Item"
-              ></i>
+              <a href="#" class="btn" title="Bayar">Bayar</a>
             </div>
-            <div class="cart-box">
-              <img src="assets/images/Product-13.png" alt="Nike Shoe" />
-              <div class="cart-text">
-                <h3>Nike Shoe</h3>
-                <span>Rp. 5000</span>
-                <span>1</span>
-              </div>
-              <i
-                class="ri-delete-bin-line"
-                title="remove item"
-                aria-label="delete Item"
-              ></i>
-            </div>
-
-            <div class="total">
-              <h3>2 Items</h3>
-              <span>Total Rp. 15000</span>
-            </div>
-            <a href="#" class="btn" title="Bayar"> Bayar</a>
           </div>
         </div>
+        
+        <!-- Payment Methods Modal -->
+        <div class="payment-modal">
+          <div class="payment-content">
+            <div class="payment-header">
+              <h3>Pilih Metode Pembayaran</h3>
+              <i class="ri-close-line close-payment" title="Close payment" aria-label="Close payment"></i>
+            </div>
+            <div class="payment-methods">
+              <div class="payment-method" data-method="cod">
+                <div class="payment-icon">
+                  <i class="ri-truck-line"></i>
+                </div>
+                <div class="payment-info">
+                  <h4>Cash on Delivery (COD)</h4>
+                  <p>Bayar ketika barang diterima</p>
+                </div>
+              </div>
+              
+              <div class="payment-method" data-method="bank">
+                <div class="payment-icon">
+                  <i class="ri-bank-line"></i>
+                </div>
+                <div class="payment-info">
+                  <h4>Transfer Bank</h4>
+                  <p>BCA, Mandiri, BRI, dll</p>
+                </div>
+              </div>
+              
+              <div class="payment-method" data-method="dana">
+                <div class="payment-icon">
+                  <i class="ri-wallet-3-line"></i>
+                </div>
+                <div class="payment-info">
+                  <h4>DANA</h4>
+                  <p>Bayar via aplikasi DANA</p>
+                </div>
+              </div>
+              
+              <div class="payment-method" data-method="ovo">
+                <div class="payment-icon">
+                  <i class="ri-smartphone-line"></i>
+                </div>
+                <div class="payment-info">
+                  <h4>OVO</h4>
+                  <p>Bayar via aplikasi OVO</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Bank Selection Modal -->
+        <div class="bank-modal">
+          <div class="bank-content">
+            <div class="bank-header">
+              <h3>Pilih Bank</h3>
+              <i class="ri-close-line close-bank" title="Close bank selection"></i>
+            </div>
+            <div class="bank-options">
+              <div class="bank-option" data-bank="bca">
+                <img src="assets/images/bca.jpg" alt="BCA">
+                <span>Bank BCA</span>
+              </div>
+              <div class="bank-option" data-bank="mandiri">
+                <img src="assets/images/bca.jpg" alt="Mandiri">
+                <span>Bank Mandiri</span>
+              </div>
+              <div class="bank-option" data-bank="bri">
+                <img src="assets/images/bca.jpg" alt="BRI">
+                <span>Bank BRI</span>
+              </div>
+              <div class="bank-option" data-bank="bni">
+                <img src="assets/images/bca.jpg" alt="BNI">
+                <span>Bank BNI</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Account Number Input Modal -->
+        <div class="account-modal">
+          <div class="account-content">
+            <div class="account-header">
+              <h3 class="account-title">Masukkan Data Pembayaran</h3>
+              <i class="ri-close-line close-account" title="Close account input"></i>
+            </div>
+            <div class="account-form">
+              <div class="form-group">
+                <label for="account-number">Nomor Rekening/HP</label>
+                <input type="text" id="account-number" placeholder="Masukkan nomor rekening/HP" required>
+                <div class="error-message" id="number-error"></div>
+              </div>
+              <div class="form-group">
+                <label for="account-name">Nama Pemilik Rekening</label>
+                <input type="text" id="account-name" placeholder="Masukkan nama pemilik" required>
+                <div class="error-message" id="name-error"></div>
+              </div>
+              <div class="form-group">
+                <label for="alamat">Masukkan Alamat</label>
+                <input type="text" id="alamat" placeholder="Masukkan Alamat" required>
+                <div class="error-message" id="address-error"></div>
+              </div>
+              <button class="btn confirm-payment">Konfirmasi Pembayaran</button>
+            </div>
+          </div>
+        </div>
+        
 
         <div class="user-name-container" style="display: none">
           <div class="name-dropdown">

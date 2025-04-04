@@ -25,6 +25,23 @@ let currentUser = JSON.parse(localStorage.getItem("currentUser")) || null;
 // Store original prices
 const originalPrices = new WeakMap();
 
+// Toggle cart icon visibility
+function toggleCartIconVisibility() {
+  if (navbar.classList.contains("active")) {
+    cartIcon.style.display = "none";
+  } else {
+    cartIcon.style.display = "block";
+  }
+}
+
+// function toggleUserIconVisibility() {
+//   if (navbar.classList.contains("active")) {
+//     userIcon.style.display = "none";
+//   } else {
+//     userIcon.style.display = "none";
+//   }
+// }
+
 // Toggle functions
 menuIcon.onclick = () => {
   navbar.classList.toggle("active");
@@ -32,6 +49,8 @@ menuIcon.onclick = () => {
   cart.classList.remove("active");
   loginForm.classList.remove("active");
   closeDropdown();
+  toggleCartIconVisibility();
+  toggleUserIconVisibility(); 
 };
 
 cartIcon.onclick = () => {
@@ -40,6 +59,7 @@ cartIcon.onclick = () => {
   menuIcon.classList.remove("move");
   loginForm.classList.remove("active");
   closeDropdown();
+  cartIcon.style.display = "block";
 };
 
 userIcon.onclick = () => {
@@ -48,6 +68,7 @@ userIcon.onclick = () => {
   navbar.classList.remove("active");
   menuIcon.classList.remove("move");
   closeDropdown();
+  cartIcon.style.display = "block";
 
   // Show login form by default
   loginFormElement.classList.add("active");
@@ -526,24 +547,92 @@ searchInput.addEventListener("keypress", (e) => {
 });
 
 // Keranjang
-// Cart functionality
-document.addEventListener("DOMContentLoaded", function () {
-  // Initialize cart array to store products
+document.addEventListener("DOMContentLoaded", function() {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  // DOM elements
+  // DOM Elements
+  const cartElement = document.querySelector(".cart");
   const cartContainer = document.querySelector(".cart-content");
-  const cartCount = document.querySelector(".total h3");
-  const cartTotal = document.querySelector(".total span");
-  const payButton = document.querySelector(".btn");
+  const cartItemsContainer = document.querySelector(".cart-items-container");
+  const cartToggle = document.querySelector(".cart-toggle");
+  const closeCartBtn = document.querySelector(".close-cart");
+  const paymentModal = document.querySelector(".payment-modal");
+  const closePaymentBtn = document.querySelector(".close-payment");
+  const paymentMethods = document.querySelectorAll(".payment-method");
+  const bankModal = document.querySelector(".bank-modal");
+  const accountModal = document.querySelector(".account-modal");
+  const closeBankBtn = document.querySelector(".close-bank");
+  const closeAccountBtn = document.querySelector(".close-account");
+  const bankOptions = document.querySelectorAll(".bank-option");
+  const confirmBtn = document.querySelector(".confirm-payment");
 
-  // Function to update cart display
+  // Toggle cart visibility
+  function toggleCart(open = false) {
+    if (open) {
+      cartElement.classList.add("active");
+      hideCartToggle();
+    } else {
+      cartElement.classList.toggle("active");
+      if (cartElement.classList.contains("active")) {
+        hideCartToggle();
+      } else {
+        showCartToggle();
+      }
+    }
+  }
+
+  function hideCartToggle() {
+    if (cartToggle) {
+      cartToggle.style.display = "none";
+      cartToggle.classList.add("hidden-during-payment");
+    }
+  }
+
+  function showCartToggle() {
+    if (cartToggle &&
+      !paymentModal.classList.contains("active") &&
+      !bankModal.classList.contains("active") &&
+      !accountModal.classList.contains("active")) {
+      cartToggle.style.display = "block";
+      cartToggle.classList.remove("hidden-during-payment");
+    }
+  }
+
+  // Close cart
+  if (closeCartBtn) {
+    closeCartBtn.addEventListener("click", function() {
+      cartElement.classList.remove("active");
+      showCartToggle();
+    });
+  }
+
+  // Toggle cart
+  if (cartToggle) {
+    cartToggle.addEventListener("click", function(e) {
+      e.preventDefault();
+      toggleCart();
+    });
+  }
+
+  // Close cart when clicking outside
+  cartElement.addEventListener("click", function(e) {
+    if (e.target === cartElement) {
+      toggleCart();
+    }
+  });
+
+  // Update cart display
   function updateCartDisplay() {
-    // Clear current cart display
-    if (cartContainer) {
-      cartContainer.innerHTML = "";
+    if (cartContainer && cartItemsContainer) {
+      cartItemsContainer.innerHTML = "";
 
-      // Add each product to cart display
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = `<p class="empty-cart-message">Keranjang belanja kosong</p>`;
+        document.querySelector(".total h3").textContent = "0 Items";
+        document.querySelector(".total span").textContent = "Total Rp. 0";
+        return;
+      }
+
       cart.forEach((item, index) => {
         const cartBox = document.createElement("div");
         cartBox.className = "cart-box";
@@ -551,162 +640,333 @@ document.addEventListener("DOMContentLoaded", function () {
           <img src="${item.image}" alt="${item.name}" />
           <div class="cart-text">
             <h3>${item.name}</h3>
-            <span>${item.price}</span>
-            <span>${item.quantity}</span>
-            ${item.size ? `<span>Size: ${item.size}</span>` : ""}
+            <div class="price-quantity">
+              <span>${item.price}</span>
+              <div class="quantity-controls">
+                <button class="quantity-btn minus" data-index="${index}">-</button>
+                <span>${item.quantity}</span>
+                <button class="quantity-btn plus" data-index="${index}">+</button>
+              </div>
+            </div>
+            <select class="size-selector" data-index="${index}">
+              <option value="">Pilih Ukuran</option>
+              <option value="38" ${item.size === '38' ? 'selected' : ''}>38</option>
+              <option value="39" ${item.size === '39' ? 'selected' : ''}>39</option>
+              <option value="40" ${item.size === '40' ? 'selected' : ''}>40</option>
+              <option value="41" ${item.size === '41' ? 'selected' : ''}>41</option>
+              <option value="42" ${item.size === '42' ? 'selected' : ''}>42</option>
+            </select>
           </div>
-          <i class="ri-delete-bin-line" title="remove item" aria-label="delete Item" data-index="${index}"></i>
+          <i class="ri-delete-bin-line remove-item" data-index="${index}"></i>
         `;
-        cartContainer.appendChild(cartBox);
+        cartItemsContainer.appendChild(cartBox);
       });
 
-      // Add total section if there are items
-      if (cart.length > 0) {
-        const totalSection = document.createElement("div");
-        totalSection.className = "total";
+      // Update total
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const totalPrice = cart.reduce((sum, item) => {
+        const price = parseInt(item.price.replace(/\D/g, ""));
+        return sum + price * item.quantity;
+      }, 0);
 
-        // Calculate total items and price
-        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-        const totalPrice = cart.reduce((sum, item) => {
-          const price = parseInt(item.price.replace(/\D/g, "")); // Extract numbers from price string
-          return sum + price * item.quantity;
-        }, 0);
+      document.querySelector(".total h3").textContent = `${totalItems} Item${totalItems !== 1 ? 's' : ''}`;
+      document.querySelector(".total span").textContent = `Total Rp. ${totalPrice.toLocaleString('id-ID')}`;
 
-        totalSection.innerHTML = `
-          <h3>${totalItems} Items</h3>
-          <span>Total Rp. ${totalPrice.toLocaleString()}</span>
-        `;
-
-        // Add pay button
-        const payBtn = document.createElement("a");
-        payBtn.href = "#";
-        payBtn.className = "btn";
-        payBtn.title = "Bayar";
-        payBtn.textContent = "Bayar";
-
-        cartContainer.appendChild(totalSection);
-        cartContainer.appendChild(payBtn);
-
-        // Add event listener to new pay button
-        payBtn.addEventListener("click", function (e) {
-          e.preventDefault();
-          processPayment();
+      // Add event listeners for dynamic elements
+      document.querySelectorAll(".remove-item").forEach(btn => {
+        btn.addEventListener("click", function() {
+          removeFromCart(parseInt(this.getAttribute("data-index")));
         });
-      } else {
-        cartContainer.innerHTML =
-          '<p class="empty-cart">Your cart is empty</p>';
-      }
+      });
 
-      // Add event listeners to delete buttons
-      document.querySelectorAll(".ri-delete-bin-line").forEach((button) => {
-        button.addEventListener("click", function () {
+      document.querySelectorAll(".quantity-btn").forEach(btn => {
+        btn.addEventListener("click", function() {
           const index = parseInt(this.getAttribute("data-index"));
-          removeFromCart(index);
+          const isPlus = this.classList.contains("plus");
+          updateQuantity(index, isPlus);
+        });
+      });
+
+      document.querySelectorAll(".size-selector").forEach(select => {
+        select.addEventListener("change", function() {
+          const index = parseInt(this.getAttribute("data-index"));
+          const newSize = this.value;
+          updateSize(index, newSize);
         });
       });
     }
 
-    // Save cart to localStorage
     localStorage.setItem("cart", JSON.stringify(cart));
   }
 
-  // Function to add product to cart
+  // Cart operations
   function addToCart(product) {
-    // Check if product already exists in cart
-    const existingItemIndex = cart.findIndex(
-      (item) =>
-        item.name === product.name &&
-        (!product.size || item.size === product.size)
+    const existingIndex = cart.findIndex(item => 
+      item.name === product.name && item.size === (product.size || null)
     );
-
-    if (existingItemIndex !== -1) {
-      cart[existingItemIndex].quantity += product.quantity || 1;
+    
+    if (existingIndex !== -1) {
+      cart[existingIndex].quantity += product.quantity || 1;
     } else {
       cart.push({
         name: product.name,
         price: product.price,
         image: product.image,
         quantity: product.quantity || 1,
-        size: product.size || null,
+        size: product.size || null
       });
     }
-
     updateCartDisplay();
-    showAddToCartConfirmation(product.name);
+    showNotification(`${product.name} ditambahkan ke keranjang!`);
   }
 
-  // Function to remove product from cart
   function removeFromCart(index) {
     if (index >= 0 && index < cart.length) {
       cart.splice(index, 1);
       updateCartDisplay();
+      showNotification("Produk dihapus dari keranjang");
     }
   }
 
-  // Function to process payment
-  function processPayment() {
-    if (cart.length > 0) {
-      const total = cart.reduce((sum, item) => {
-        const price = parseInt(item.price.replace(/\D/g, ""));
-        return sum + price * item.quantity;
-      }, 0);
-
-      alert(`Pembayaran berhasil! Total: Rp. ${total.toLocaleString()}`);
-
-      // Clear cart after payment
-      cart = [];
-      updateCartDisplay();
-    } else {
-      alert("Keranjang belanja kosong!");
-    }
-  }
-
-  // Function to show add to cart confirmation
-  function showAddToCartConfirmation(productName) {
-    const confirmation = document.createElement("div");
-    confirmation.className = "cart-confirmation";
-    confirmation.innerHTML = `<span>${productName} added to cart!</span>`;
-    document.body.appendChild(confirmation);
-
-    setTimeout(() => confirmation.classList.add("show"), 10);
-    setTimeout(() => {
-      confirmation.classList.remove("show");
-      setTimeout(() => document.body.removeChild(confirmation), 300);
-    }, 3000);
-  }
-
-  // Add event listener for product detail page "Add to Cart" button
-  document
-    .querySelector(".add-to-cart")
-    ?.addEventListener("click", function () {
-      const productName = document.querySelector(".product-name").textContent;
-      const productPrice = document.querySelector(".current-price").textContent;
-      const productImage = document.querySelector(".product-main-image").src;
-      const selectedSize = document.querySelector(
-        ".size-option input:checked"
-      )?.value;
-      const quantity =
-        parseInt(document.querySelector(".quantity-input").value) || 1;
-
-      if (!selectedSize) {
-        const sizeError = document.querySelector(".size-error-message");
-        sizeError.textContent = "Please select a size";
-        sizeError.style.display = "block";
-        return;
+  function updateQuantity(index, isPlus) {
+    if (index >= 0 && index < cart.length) {
+      if (isPlus) {
+        cart[index].quantity += 1;
+      } else if (cart[index].quantity > 1) {
+        cart[index].quantity -= 1;
       }
+      updateCartDisplay();
+    }
+  }
 
-      addToCart({
-        name: productName,
-        price: productPrice,
-        image: productImage,
-        size: selectedSize,
-        quantity: quantity,
-      });
+  function updateSize(index, newSize) {
+    if (index >= 0 && index < cart.length) {
+      cart[index].size = newSize;
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+  }
+
+  // Notification system
+  function showNotification(message, isError = false) {
+    const notification = document.createElement("div");
+    notification.className = `notification ${isError ? 'error' : ''}`;
+    notification.innerHTML = `<span>${message}</span>`;
+    document.body.appendChild(notification);
+
+    // Style the notification
+    notification.style.position = "fixed";
+    notification.style.bottom = "20px";
+    notification.style.right = "20px";
+    notification.style.padding = "15px 20px";
+    notification.style.borderRadius = "5px";
+    notification.style.zIndex = "1000";
+    notification.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
+    notification.style.transform = "translateX(100%)";
+    notification.style.opacity = "0";
+    notification.style.transition = "all 0.3s ease";
+    notification.style.backgroundColor = isError ? "#ff5252" : "#4CAF50";
+    notification.style.color = "white";
+
+    // Show animation
+    setTimeout(() => {
+      notification.style.transform = "translateX(0)";
+      notification.style.opacity = "1";
+    }, 10);
+
+    // Hide after 2 seconds
+    setTimeout(() => {
+      notification.style.transform = "translateX(100%)";
+      notification.style.opacity = "0";
+      setTimeout(() => notification.remove(), 300);
+    }, 2000);
+  }
+
+  // Payment process
+  function showPaymentMethods(e) {
+    if (e) e.preventDefault();
+    paymentModal.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closePaymentModal() {
+    paymentModal.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+
+  function processPayment(e) {
+    if (cart.length === 0) {
+      e.preventDefault();
+      showNotification("Keranjang belanja kosong! Silakan tambahkan produk terlebih dahulu.", true);
+      return;
+    }
+    showPaymentMethods(e);
+  }
+
+  // Buy Now functionality
+  document.querySelector(".buy-now")?.addEventListener("click", function() {
+    const productName = document.querySelector(".product-name").textContent;
+    const productPrice = document.querySelector(".current-price").textContent;
+    const productImage = document.querySelector(".product-main-image").src;
+    const selectedSize = document.querySelector(".size-option input:checked")?.value;
+    const quantity = parseInt(document.querySelector(".quantity-input").value) || 1;
+
+    if (!selectedSize) {
+      const sizeError = document.querySelector(".size-error-message");
+      sizeError.textContent = "Silakan pilih ukuran";
+      sizeError.style.display = "block";
+      showNotification("Silakan pilih ukuran terlebih dahulu", true);
+      return;
+    }
+
+    // Clear cart and add only this product
+    cart = [];
+    addToCart({
+      name: productName,
+      price: productPrice,
+      image: productImage,
+      size: selectedSize,
+      quantity: quantity
     });
 
-  // Add event listeners to all product box "Add to Cart" buttons
-  document.querySelectorAll(".box-text a").forEach((button) => {
-    button.addEventListener("click", function (e) {
+    // Open payment methods
+    showPaymentMethods(new Event('click'));
+    
+    // Ensure cart is open
+    if (!cartElement.classList.contains("active")) {
+      toggleCart(true);
+    }
+  });
+
+  // Payment method selection
+  paymentMethods.forEach(method => {
+    method.addEventListener("click", function() {
+      const paymentMethod = this.getAttribute("data-method");
+      
+      paymentMethods.forEach(m => m.classList.remove("active"));
+      this.classList.add("active");
+
+      if (paymentMethod === "bank") {
+        paymentModal.classList.remove("active");
+        bankModal.classList.add("active");
+      } else {
+        paymentModal.classList.remove("active");
+        accountModal.classList.add("active");
+      }
+    });
+  });
+
+  // Bank selection
+  bankOptions.forEach(bank => {
+    bank.addEventListener("click", function() {
+      bankModal.classList.remove("active");
+      accountModal.classList.add("active");
+    });
+  });
+
+  // Modal close buttons
+  if (closePaymentBtn) {
+    closePaymentBtn.addEventListener("click", closePaymentModal);
+  }
+
+  if (closeBankBtn) {
+    closeBankBtn.addEventListener("click", function() {
+      bankModal.classList.remove("active");
+      paymentModal.classList.add("active");
+    });
+  }
+
+  if (closeAccountBtn) {
+    closeAccountBtn.addEventListener("click", function() {
+      accountModal.classList.remove("active");
+      paymentModal.classList.add("active");
+    });
+  }
+
+  // Confirm payment
+  if (confirmBtn) {
+    confirmBtn.addEventListener("click", function(e) {
+      e.preventDefault();
+      
+      // Simple validation
+      let isValid = true;
+      const number = document.querySelector("#account-number").value.trim();
+      const name = document.querySelector("#account-name").value.trim();
+      const address = document.querySelector("#alamat").value.trim();
+
+      document.querySelectorAll(".error-message").forEach(el => {
+        el.style.display = "none";
+      });
+
+      if (!number) {
+        document.getElementById("number-error").textContent = "Nomor rekening/HP harus diisi";
+        document.getElementById("number-error").style.display = "block";
+        isValid = false;
+      }
+
+      if (!name) {
+        document.getElementById("name-error").textContent = "Nama pemilik harus diisi";
+        document.getElementById("name-error").style.display = "block";
+        isValid = false;
+      }
+
+      if (!address) {
+        document.getElementById("address-error").textContent = "Alamat harus diisi";
+        document.getElementById("address-error").style.display = "block";
+        isValid = false;
+      }
+
+      if (isValid) {
+        const activeMethod = document.querySelector(".payment-method.active");
+        const method = activeMethod ? activeMethod.getAttribute("data-method") : "bank";
+        
+        // Calculate total
+        const total = cart.reduce((sum, item) => {
+          const price = parseInt(item.price.replace(/\D/g, ""));
+          return sum + price * item.quantity;
+        }, 0);
+
+        showNotification(`Pembayaran dengan ${method} berhasil! Total: Rp ${total.toLocaleString('id-ID')}`);
+        
+        // Clear cart
+        cart = [];
+        updateCartDisplay();
+        
+        // Close all modals
+        accountModal.classList.remove("active");
+        paymentModal.classList.remove("active");
+        document.body.style.overflow = "";
+      }
+    });
+  }
+
+  // Add to cart button
+  document.querySelector(".add-to-cart")?.addEventListener("click", function() {
+    const productName = document.querySelector(".product-name").textContent;
+    const productPrice = document.querySelector(".current-price").textContent;
+    const productImage = document.querySelector(".product-main-image").src;
+    const selectedSize = document.querySelector(".size-option input:checked")?.value;
+    const quantity = parseInt(document.querySelector(".quantity-input").value) || 1;
+
+    if (!selectedSize) {
+      const sizeError = document.querySelector(".size-error-message");
+      sizeError.textContent = "Silakan pilih ukuran";
+      sizeError.style.display = "block";
+      showNotification("Silakan pilih ukuran terlebih dahulu", true);
+      return;
+    }
+
+    addToCart({
+      name: productName,
+      price: productPrice,
+      image: productImage,
+      size: selectedSize,
+      quantity: quantity
+    });
+  });
+
+  // Add to cart from product boxes
+  document.querySelectorAll(".box-text a").forEach(button => {
+    button.addEventListener("click", function(e) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -714,12 +974,11 @@ document.addEventListener("DOMContentLoaded", function () {
       const product = {
         name: box.querySelector("h3").textContent,
         price: box.querySelector(".title-price span").textContent,
-        image: box.querySelector("img").getAttribute("src"),
+        image: box.querySelector("img").src
       };
 
       addToCart(product);
 
-      // Visual feedback
       const originalIcon = this.innerHTML;
       this.innerHTML = '<i class="ri-check-line"></i>';
       setTimeout(() => {
@@ -728,39 +987,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Pay button functionality
-  payButton?.addEventListener("click", function (e) {
-    e.preventDefault();
-    processPayment();
-  });
-
-  // Add styles for confirmation message
-  const style = document.createElement("style");
-  style.textContent = `
-    .cart-confirmation {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #4CAF50;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 4px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-      z-index: 1000;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    .cart-confirmation.show {
-      opacity: 1;
-    }
-    .empty-cart {
-      text-align: center;
-      padding: 20px;
-      color: #666;
-    }
-  `;
-  document.head.appendChild(style);
+  // Pay button event listener
+  document.querySelector(".btn")?.addEventListener("click", processPayment);
 
   // Initialize cart display
   updateCartDisplay();
@@ -1171,3 +1399,4 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 //
+
