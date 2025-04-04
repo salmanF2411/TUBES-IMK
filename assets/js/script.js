@@ -548,7 +548,13 @@ searchInput.addEventListener("keypress", (e) => {
 
 // Keranjang
 document.addEventListener("DOMContentLoaded", function() {
-  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  // Cek apakah pengguna sudah login (contoh implementasi sederhana)
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const userCartKey = isLoggedIn ? `cart_${localStorage.getItem("userId")}` : "guest_cart";
+
+  // Jika pengguna tidak login, gunakan keranjang kosong
+  // Jika login, coba ambil dari localStorage, jika tidak ada gunakan array kosong
+  let cart = isLoggedIn ? JSON.parse(localStorage.getItem(userCartKey)) || [] : [];
 
   // DOM Elements
   const cartElement = document.querySelector(".cart");
@@ -565,6 +571,34 @@ document.addEventListener("DOMContentLoaded", function() {
   const closeAccountBtn = document.querySelector(".close-account");
   const bankOptions = document.querySelectorAll(".bank-option");
   const confirmBtn = document.querySelector(".confirm-payment");
+
+  // Simulasikan login/logout untuk contoh
+  // Dalam implementasi nyata, ini akan dipanggil saat login/logout
+  function simulateLogin(userId) {
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("userId", userId);
+    
+    // Pindahkan item dari guest cart ke user cart jika ada
+    const guestCart = JSON.parse(localStorage.getItem("guest_cart")) || [];
+    if (guestCart.length > 0) {
+      const userCartKey = `cart_${userId}`;
+      const existingUserCart = JSON.parse(localStorage.getItem(userCartKey)) || [];
+      const mergedCart = [...existingUserCart, ...guestCart];
+      localStorage.setItem(userCartKey, JSON.stringify(mergedCart));
+      localStorage.removeItem("guest_cart");
+      
+      // Update cart yang ditampilkan
+      cart = mergedCart;
+      updateCartDisplay();
+    }
+  }
+
+  function simulateLogout() {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userId");
+    cart = [];
+    updateCartDisplay();
+  }
 
   // Toggle cart visibility
   function toggleCart(open = false) {
@@ -630,6 +664,9 @@ document.addEventListener("DOMContentLoaded", function() {
         cartItemsContainer.innerHTML = `<p class="empty-cart-message">Keranjang belanja kosong</p>`;
         document.querySelector(".total h3").textContent = "0 Items";
         document.querySelector(".total span").textContent = "Total Rp. 0";
+        
+        // Simpan keranjang kosong ke storage
+        saveCartToStorage();
         return;
       }
 
@@ -696,7 +733,16 @@ document.addEventListener("DOMContentLoaded", function() {
       });
     }
 
-    localStorage.setItem("cart", JSON.stringify(cart));
+    saveCartToStorage();
+  }
+
+  function saveCartToStorage() {
+    if (isLoggedIn) {
+      const userCartKey = `cart_${localStorage.getItem("userId")}`;
+      localStorage.setItem(userCartKey, JSON.stringify(cart));
+    } else {
+      localStorage.setItem("guest_cart", JSON.stringify(cart));
+    }
   }
 
   // Cart operations
@@ -742,7 +788,7 @@ document.addEventListener("DOMContentLoaded", function() {
   function updateSize(index, newSize) {
     if (index >= 0 && index < cart.length) {
       cart[index].size = newSize;
-      localStorage.setItem("cart", JSON.stringify(cart));
+      saveCartToStorage();
     }
   }
 
