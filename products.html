@@ -29,312 +29,312 @@
   </head>
 
   <body>
-        <!-- header -->
-        <header>
-          <div class="nav container">
-            <div class="menu-icon" aria-label="Toggle Navigation Menu">
-              <div class="line1"></div>
-              <div class="line2"></div>
-              <div class="line3"></div>
-            </div>
-            <ul class="navbar" role="navigation">
-              <li><a href="index.html" title="Go To home">Home</a></li>
-              <li><a href="#category" title="Go To home">Category</a></li>
-              <li><a href="#popular" title="Go To home">Popular</a></li>
-              <li><a href="#about" title="Go To home">About</a></li>
-              <li><a href="#products" title="Go To home">Products</a></li>
-              <li><a href="contact.html" title="Go To home">Contact Us</a></li>
-            </ul>
-            <a href="#" class="logo" title="Shoe Bazzar">
-              Hype<span>Kicks</span>
-            </a>
-    
-            <div class="search-container">
-              <input
-                type="text"
-                id="search"
-                placeholder="Search..."
-                aria-label="Search"
-              />
-              <button id="search-btn" title="Search">
-                <i class="ri-search-line"></i>
-              </button>
-            </div>
-    
-            <div class="nav-icons">
-              <i
-                class="ri-shopping-cart-line"
-                id="cart-icon"
-                title="view Shopping"
-                aria-label="Shopping Cart"
-              ></i>
-              <i
-                class="ri-user-line"
-                id="user-icon"
-                title="User Account"
-                aria-label="User Account"
-              ></i>
-            </div>
-    
-            <div class="cart">
-              <div class="cart-content">
-                <div class="cart-header">
-                  <i class="ri-close-line close-cart" title="Close cart" aria-label="Close cart"></i>
-                  <h3 class="cart-title">Your Cart</h3>
-                </div>
-                
-                <div class="cart-items-container">
-                  <!-- Cart items will be inserted here -->
-                </div>
-                
-                <div class="cart-footer">
-                  <div class="total">
-                    <h3>2 Items</h3>
-                    <span>Total Rp. 15000</span>
-                  </div>
-                  <a href="#" class="btn" title="Bayar">Bayar</a>
-                </div>
-              </div>
+       <!-- header -->
+    <header>
+      <div class="nav container">
+        <div class="menu-icon" aria-label="Toggle Navigation Menu">
+          <div class="line1"></div>
+          <div class="line2"></div>
+          <div class="line3"></div>
+        </div>
+        <ul class="navbar" role="navigation">
+          <li><a href="index.html" title="Go To home">Home</a></li>
+          <li><a href="index.html#category" title="Go To home">Category</a></li>
+          <li><a href="index.html#popular" title="Go To home">Popular</a></li>
+          <li><a href="about.html" title="Go To home">About</a></li>
+          <li><a href="#products" title="Go To home">Products</a></li>
+          <li><a href="contact.html" title="Go To home">Contact Us</a></li>
+        </ul>
+        <a href="#" class="logo" title="Shoe Bazzar">
+          Hype<span>Kicks</span>
+        </a>
+
+        <div class="search-container">
+          <input
+            type="text"
+            id="search"
+            placeholder="Search..."
+            aria-label="Search"
+          />
+          <button id="search-btn" title="Search">
+            <i class="ri-search-line"></i>
+          </button>
+        </div>
+
+        <div class="nav-icons">
+          <i
+            class="ri-shopping-cart-line"
+            id="cart-icon"
+            title="view Shopping"
+            aria-label="Shopping Cart"
+          ></i>
+          <i
+            class="ri-user-line"
+            id="user-icon"
+            title="User Account"
+            aria-label="User Account"
+          ></i>
+        </div>
+
+        <div class="cart">
+          <div class="cart-content">
+            <div class="cart-header">
+              <i class="ri-close-line close-cart" title="Close cart" aria-label="Close cart"></i>
+              <h3 class="cart-title">Your Cart</h3>
             </div>
             
-            <!-- Payment Methods Modal -->
-            <div class="payment-modal">
-              <div class="payment-content">
-                <div class="payment-header">
-                  <h3>Pilih Metode Pembayaran</h3>
-                  <i class="ri-close-line close-payment" title="Close payment" aria-label="Close payment"></i>
-                </div>
-                <div class="payment-methods">
-                  <div class="payment-method" data-method="cod">
-                    <div class="payment-icon">
-                      <i class="ri-truck-line"></i>
-                    </div>
-                    <div class="payment-info">
-                      <h4>Cash on Delivery (COD)</h4>
-                      <p>Bayar ketika barang diterima</p>
-                    </div>
-                  </div>
-                  
-                  <div class="payment-method" data-method="bank">
-                    <div class="payment-icon">
-                      <i class="ri-bank-line"></i>
-                    </div>
-                    <div class="payment-info">
-                      <h4>Transfer Bank</h4>
-                      <p>BCA, Mandiri, BRI, dll</p>
-                    </div>
-                  </div>
-                  
-                  <div class="payment-method" data-method="dana">
-                    <div class="payment-icon">
-                      <i class="ri-wallet-3-line"></i>
-                    </div>
-                    <div class="payment-info">
-                      <h4>DANA</h4>
-                      <p>Bayar via aplikasi DANA</p>
-                    </div>
-                  </div>
-                  
-                  <div class="payment-method" data-method="ovo">
-                    <div class="payment-icon">
-                      <i class="ri-smartphone-line"></i>
-                    </div>
-                    <div class="payment-info">
-                      <h4>OVO</h4>
-                      <p>Bayar via aplikasi OVO</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div class="cart-items-container">
+              <!-- Cart items will be inserted here -->
             </div>
             
-            <!-- Bank Selection Modal -->
-            <div class="bank-modal">
-              <div class="bank-content">
-                <div class="bank-header">
-                  <h3>Pilih Bank</h3>
-                  <i class="ri-close-line close-bank" title="Close bank selection"></i>
-                </div>
-                <div class="bank-options">
-                  <div class="bank-option" data-bank="bca">
-                    <img src="assets/images/bca.jpg" alt="BCA">
-                    <span>Bank BCA</span>
-                  </div>
-                  <div class="bank-option" data-bank="mandiri">
-                    <img src="assets/images/bca.jpg" alt="Mandiri">
-                    <span>Bank Mandiri</span>
-                  </div>
-                  <div class="bank-option" data-bank="bri">
-                    <img src="assets/images/bca.jpg" alt="BRI">
-                    <span>Bank BRI</span>
-                  </div>
-                  <div class="bank-option" data-bank="bni">
-                    <img src="assets/images/bca.jpg" alt="BNI">
-                    <span>Bank BNI</span>
-                  </div>
-                </div>
+            <div class="cart-footer">
+              <div class="total">
+                <h3>2 Items</h3>
+                <span>Total Rp. 15000</span>
               </div>
-            </div>
-            
-            <!-- Account Number Input Modal -->
-            <div class="account-modal">
-              <div class="account-content">
-                <div class="account-header">
-                  <h3 class="account-title">Masukkan Data Pembayaran</h3>
-                  <i class="ri-close-line close-account" title="Close account input"></i>
-                </div>
-                <div class="account-form">
-                  <div class="form-group">
-                    <label for="account-number">Nomor Rekening/HP</label>
-                    <input type="text" id="account-number" placeholder="Masukkan nomor rekening/HP" required>
-                    <div class="error-message" id="number-error"></div>
-                  </div>
-                  <div class="form-group">
-                    <label for="account-name">Nama Pemilik Rekening</label>
-                    <input type="text" id="account-name" placeholder="Masukkan nama pemilik" required>
-                    <div class="error-message" id="name-error"></div>
-                  </div>
-                  <div class="form-group">
-                    <label for="alamat">Masukkan Alamat</label>
-                    <input type="text" id="alamat" placeholder="Masukkan Alamat" required>
-                    <div class="error-message" id="address-error"></div>
-                  </div>
-                  <button class="btn confirm-payment">Konfirmasi Pembayaran</button>
-                </div>
-              </div>
-            </div>
-            
-    
-            <div class="user-name-container" style="display: none">
-              <div class="name-dropdown">
-                <span class="user-name" id="navbarUsername"></span>
-                <div class="dropdown-content">
-                  <a href="#" id="logoutBtn">
-                    <i class="ri-logout-box-r-line"></i> Logout
-                  </a>
-                </div>
-              </div>
-            </div>
-    
-            <!-- Login Forms Container -->
-            <div class="login-form">
-              <!-- Main Login Form -->
-              <form id="loginForm" class="form-container active">
-                <h2>Login To Continue</h2>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Enter Your Email"
-                  required
-                  aria-label="Email"
-                />
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Enter Your Password"
-                  required
-                  aria-label="Password"
-                />
-    
-                <a
-                  href="#"
-                  class="forgot-password-link"
-                  title="Recover Your Password"
-                >
-                  Forgot Password?
-                </a>
-    
-                <input type="submit" value="Login" class="btn" />
-    
-                <a
-                  href="#"
-                  class="create-account-link"
-                  title="Create a new Account"
-                >
-                  Create Account
-                </a>
-              </form>
-    
-              <!-- Forgot Password Form -->
-              <form id="forgotPasswordForm" class="form-container">
-                <h2>Forgot Password</h2>
-                <p>Enter your email to receive a password reset link</p>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Enter Your Email"
-                  required
-                  aria-label="Email"
-                />
-                <input type="submit" value="Submit" class="btn" />
-                <a href="#" class="back-to-login" title="Back to Login">
-                  Back to Login
-                </a>
-              </form>
-    
-              <!-- Reset Password Form -->
-              <form id="resetPasswordForm" class="form-container">
-                <h2>Reset Password</h2>
-                <input
-                  type="password"
-                  name="new-password"
-                  placeholder="Enter New Password"
-                  required
-                  aria-label="New Password"
-                />
-                <input
-                  type="password"
-                  name="confirm-new-password"
-                  placeholder="Confirm New Password"
-                  required
-                  aria-label="Confirm Password"
-                />
-                <input type="submit" value="Reset Password" class="btn" />
-                <a href="#" class="back-to-login" title="Back to Login">
-                  Back to Login
-                </a>
-              </form>
-    
-              <!-- Create Account Form -->
-              <form id="createAccountForm" class="form-container">
-                <h2>Create Account</h2>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Enter Your Name"
-                  required
-                  aria-label="Name"
-                />
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Enter Your Email"
-                  required
-                  aria-label="Email"
-                />
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Enter Your Password"
-                  required
-                  aria-label="Password"
-                />
-                <input
-                  type="password"
-                  name="confirm-password"
-                  placeholder="Confirm Your Password"
-                  required
-                  aria-label="Confirm Password"
-                />
-                <input type="submit" value="Sign Up" class="btn" />
-                <a href="#" class="back-to-login" title="Back to Login">
-                  Already have an account? Login
-                </a>
-              </form>
+              <a href="#" class="btn" title="Bayar">Bayar</a>
             </div>
           </div>
-        </header>
-        <!-- header end -->
+        </div>
+        
+        <!-- Payment Methods Modal -->
+        <div class="payment-modal">
+          <div class="payment-content">
+            <div class="payment-header">
+              <h3>Pilih Metode Pembayaran</h3>
+              <i class="ri-close-line close-payment" title="Close payment" aria-label="Close payment"></i>
+            </div>
+            <div class="payment-methods">
+              <div class="payment-method" data-method="cod">
+                <div class="payment-icon">
+                  <i class="ri-truck-line"></i>
+                </div>
+                <div class="payment-info">
+                  <h4>Cash on Delivery (COD)</h4>
+                  <p>Bayar ketika barang diterima</p>
+                </div>
+              </div>
+              
+              <div class="payment-method" data-method="bank">
+                <div class="payment-icon">
+                  <i class="ri-bank-line"></i>
+                </div>
+                <div class="payment-info">
+                  <h4>Transfer Bank</h4>
+                  <p>BCA, Mandiri, BRI, dll</p>
+                </div>
+              </div>
+              
+              <div class="payment-method" data-method="dana">
+                <div class="payment-icon">
+                  <i class="ri-wallet-3-line"></i>
+                </div>
+                <div class="payment-info">
+                  <h4>DANA</h4>
+                  <p>Bayar via aplikasi DANA</p>
+                </div>
+              </div>
+              
+              <div class="payment-method" data-method="ovo">
+                <div class="payment-icon">
+                  <i class="ri-smartphone-line"></i>
+                </div>
+                <div class="payment-info">
+                  <h4>OVO</h4>
+                  <p>Bayar via aplikasi OVO</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Bank Selection Modal -->
+        <div class="bank-modal">
+          <div class="bank-content">
+            <div class="bank-header">
+              <h3>Pilih Bank</h3>
+              <i class="ri-close-line close-bank" title="Close bank selection"></i>
+            </div>
+            <div class="bank-options">
+              <div class="bank-option" data-bank="bca">
+                <img src="assets/images/bca.jpg" alt="BCA">
+                <span>Bank BCA</span>
+              </div>
+              <div class="bank-option" data-bank="mandiri">
+                <img src="assets/images/bca.jpg" alt="Mandiri">
+                <span>Bank Mandiri</span>
+              </div>
+              <div class="bank-option" data-bank="bri">
+                <img src="assets/images/bca.jpg" alt="BRI">
+                <span>Bank BRI</span>
+              </div>
+              <div class="bank-option" data-bank="bni">
+                <img src="assets/images/bca.jpg" alt="BNI">
+                <span>Bank BNI</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Account Number Input Modal -->
+        <div class="account-modal">
+          <div class="account-content">
+            <div class="account-header">
+              <h3 class="account-title">Masukkan Data Pembayaran</h3>
+              <i class="ri-close-line close-account" title="Close account input"></i>
+            </div>
+            <div class="account-form">
+              <div class="form-group">
+                <label for="account-number">Nomor Rekening/HP</label>
+                <input type="text" id="account-number" placeholder="Masukkan nomor rekening/HP" required>
+                <div class="error-message" id="number-error"></div>
+              </div>
+              <div class="form-group">
+                <label for="account-name">Nama Pemilik Rekening</label>
+                <input type="text" id="account-name" placeholder="Masukkan nama pemilik" required>
+                <div class="error-message" id="name-error"></div>
+              </div>
+              <div class="form-group">
+                <label for="alamat">Masukkan Alamat</label>
+                <input type="text" id="alamat" placeholder="Masukkan Alamat" required>
+                <div class="error-message" id="address-error"></div>
+              </div>
+              <button class="btn confirm-payment">Konfirmasi Pembayaran</button>
+            </div>
+          </div>
+        </div>
+        
+
+        <div class="user-name-container" style="display: none">
+          <div class="name-dropdown">
+            <span class="user-name" id="navbarUsername"></span>
+            <div class="dropdown-content">
+              <a href="#" id="logoutBtn">
+                <i class="ri-logout-box-r-line"></i> Logout
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Login Forms Container -->
+        <div class="login-form">
+          <!-- Main Login Form -->
+          <form id="loginForm" class="form-container active">
+            <h2>Login To Continue</h2>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter Your Email"
+              required
+              aria-label="Email"
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter Your Password"
+              required
+              aria-label="Password"
+            />
+
+            <a
+              href="#"
+              class="forgot-password-link"
+              title="Recover Your Password"
+            >
+              Forgot Password?
+            </a>
+
+            <input type="submit" value="Login" class="btn" />
+
+            <a
+              href="#"
+              class="create-account-link"
+              title="Create a new Account"
+            >
+              Create Account
+            </a>
+          </form>
+
+          <!-- Forgot Password Form -->
+          <form id="forgotPasswordForm" class="form-container">
+            <h2>Forgot Password</h2>
+            <p>Enter your email to receive a password reset link</p>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter Your Email"
+              required
+              aria-label="Email"
+            />
+            <input type="submit" value="Submit" class="btn" />
+            <a href="#" class="back-to-login" title="Back to Login">
+              Back to Login
+            </a>
+          </form>
+
+          <!-- Reset Password Form -->
+          <form id="resetPasswordForm" class="form-container">
+            <h2>Reset Password</h2>
+            <input
+              type="password"
+              name="new-password"
+              placeholder="Enter New Password"
+              required
+              aria-label="New Password"
+            />
+            <input
+              type="password"
+              name="confirm-new-password"
+              placeholder="Confirm New Password"
+              required
+              aria-label="Confirm Password"
+            />
+            <input type="submit" value="Reset Password" class="btn" />
+            <a href="#" class="back-to-login" title="Back to Login">
+              Back to Login
+            </a>
+          </form>
+
+          <!-- Create Account Form -->
+          <form id="createAccountForm" class="form-container">
+            <h2>Create Account</h2>
+            <input
+              type="text"
+              name="name"
+              placeholder="Enter Your Name"
+              required
+              aria-label="Name"
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter Your Email"
+              required
+              aria-label="Email"
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter Your Password"
+              required
+              aria-label="Password"
+            />
+            <input
+              type="password"
+              name="confirm-password"
+              placeholder="Confirm Your Password"
+              required
+              aria-label="Confirm Password"
+            />
+            <input type="submit" value="Sign Up" class="btn" />
+            <a href="#" class="back-to-login" title="Back to Login">
+              Already have an account? Login
+            </a>
+          </form>
+        </div>
+      </div>
+    </header>
+    <!-- header end -->
 
     <!-- product -->
     <section class="products container" id="products" style="margin-top: 3rem">
@@ -345,7 +345,7 @@
 
       <div class="products-content">
         <div onclick="window.location.href='productDetail.html';" class="box">
-          <img src="assets/images/product-1.png" alt="Sport" />
+          <img src="assets/images/Product-5.png" alt="Sport" />
           <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
 
           <div class="box-text">
@@ -367,7 +367,7 @@
           </div>
         </div>
         <div class="box">
-          <img src="assets/images/product-1.png" alt="Sport" />
+          <img src="assets/images/Product-6.png" alt="Sport" />
           <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
 
           <div class="box-text">
@@ -389,7 +389,7 @@
           </div>
         </div>
         <div class="box">
-          <img src="assets/images/product-1.png" alt="Sport" />
+          <img src="assets/images/Product-7.png" alt="Sport" />
           <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
 
           <div class="box-text">
@@ -411,7 +411,7 @@
           </div>
         </div>
         <div class="box">
-          <img src="assets/images/product-1.png" alt="Sport" />
+          <img src="assets/images/Product-8.png" alt="Sport" />
           <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
 
           <div class="box-text">
@@ -433,7 +433,7 @@
           </div>
         </div>
         <div class="box">
-          <img src="assets/images/product-1.png" alt="Sport" />
+          <img src="assets/images/Product-9.png" alt="Sport" />
           <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
 
           <div class="box-text">
@@ -455,7 +455,7 @@
           </div>
         </div>
         <div class="box">
-          <img src="assets/images/product-1.png" alt="Sport" />
+          <img src="assets/images/Product-10.png" alt="Sport" />
           <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
 
           <div class="box-text">
@@ -477,7 +477,7 @@
           </div>
         </div>
         <div class="box">
-          <img src="assets/images/product-1.png" alt="Sport" />
+          <img src="assets/images/Product-11.png" alt="Sport" />
           <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
 
           <div class="box-text">
@@ -499,7 +499,7 @@
           </div>
         </div>
         <div class="box">
-          <img src="assets/images/product-1.png" alt="Sport" />
+          <img src="assets/images/Product-12.png" alt="Sport" />
           <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
 
           <div class="box-text">
@@ -521,7 +521,7 @@
           </div>
         </div>
         <div class="box">
-          <img src="assets/images/product-1.png" alt="Sport" />
+          <img src="assets/images/Product-13.png" alt="Sport" />
           <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
 
           <div class="box-text">
@@ -543,7 +543,7 @@
           </div>
         </div>
         <div class="box">
-          <img src="assets/images/product-1.png" alt="Sport" />
+          <img src="assets/images/Product-14.png" alt="Sport" />
           <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
 
           <div class="box-text">
@@ -565,7 +565,7 @@
           </div>
         </div>
         <div class="box">
-          <img src="assets/images/product-1.png" alt="Sport" />
+          <img src="assets/images/Product-15.png" alt="Sport" />
           <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
 
           <div class="box-text">
@@ -587,7 +587,7 @@
           </div>
         </div>
         <div class="box">
-          <img src="assets/images/product-1.png" alt="Sport" />
+          <img src="assets/images/Product-16.png" alt="Sport" />
           <i title="Love this Item?" class="ri-heart-3-line wishlist"></i>
 
           <div class="box-text">
@@ -638,42 +638,61 @@
     <section class="footer container">
       <div class="footer-box">
         <h3>Our Company</h3>
-        <a href="about.html" title="Lihat lebih">About Us</a>
-        <a href="help.html" title="Lihat lebih">Help Center</a>
-        <a href="blog.html" title="Lihat lebih">Our Blog</a>
-        <a href="privacy-policy.html" title="Lihat lebih">privacy policy</a>
+        <a href="about.html" title="Tentang Kami">About Us</a>
+        <a href="about.html#layanan" title="Layanan Kami">Layanan</a>
+        <a href="about.html#testimonial" title="Testimonial">Testimonial</a>
+        <a href="contact.html" title="Contact">contact us</a>
       </div>
-
+    
       <div class="footer-box">
-        <h3>Popular categories</h3>
-        <a href="#" title="Shop Sneakers">Sneakers</a>
-        <a href="#" title="Shop Sneakers">Sneakers</a>
-        <a href="#" title="Shop Sneakers">Sneakers</a>
-        <a href="#" title="Shop Sneakers">Sneakers</a>
+        <h3>Shop</h3>
+        <a href="#popular" title="Produk Terbaru">Product Populer</a>
+        <a href="products.html" title="Produk Terlaris">Best Sellers</a>
+        <a href="products.html" title="Sepatu Sneakers">Nike</a>
+        <a href="products.html" title="Sepatu Olahraga">Puma</a>
+        <a href="products.html" title="Diskon Spesial">Adidas</a>
+        <a href="products.html" title="Diskon Spesial">Aero Street</a>
       </div>
-
-      <div class="footer-box">
-        <h3>more information</h3>
-        <a href="shipping-Details.html" title="Lear About">shipping Details</a>
-        <a href="shipping-Details.html" title="Lear About"
-          >Delivery and Returns</a
-        >
-        <a href="shipping-Details.html" title="Lear About">Contact Us</a>
-        <a href="shipping-Details.html" title="Lear About">Sitemap</a>
-      </div>
-
-      <div class="footer-box">
-        <h3>Connect With Us</h3>
+    
+      <div class="footer-box contact-info">
+        <h3>Contact Us</h3>
+        <div class="contact-item">
+          <i class="ri-map-pin-line"></i>
+          <span>Jl. Awilarangan, Cianjur, Indonesia</span>
+        </div>
+        <div class="contact-item">
+          <i class="ri-phone-line"></i>
+          <span>+62 023 4567 890</span>
+        </div>
+        <div class="contact-item">
+          <i class="ri-mail-line"></i>
+          <span>HypeKicks@email.com</span>
+        </div>
+        
+        <div> </div>
         <div class="social">
-          <a href="#" target="_blank" title="Follow us on Facebook">
+          <a href="#" target="_blank" title="Facebook">
             <i class="ri-facebook-circle-fill"></i>
           </a>
-          <a href="#" target="_blank" title="Follow us on Twitter">
+          <a href="#" target="_blank" title="Twitter">
             <i class="ri-twitter-x-line"></i>
           </a>
-          <a href="#" target="_blank" title="Follow us on Instagram">
+          <a href="#" target="_blank" title="Instagram">
             <i class="ri-instagram-fill"></i>
           </a>
+          <a href="#" target="_blank" title="WhatsApp">
+            <i class="ri-whatsapp-line"></i>
+          </a>
+        </div>
+      </div>
+      <div class="footer-box">
+        <h3>Payment Methods</h3>
+        <div class="payment-icons">
+          <img src="assets/images/bca.jpg" alt="Visa" title="Visa">
+          <img src="assets/images/bca.jpg" alt="Mastercard" title="Mastercard">
+          <img src="assets/images/bca.jpg" alt="PayPal" title="PayPal">
+          <img src="assets/images/bca.jpg" alt="OVO" title="OVO">
+          <img src="assets/images/bca.jpg" alt="DANA" title="DANA">
         </div>
       </div>
     </section>

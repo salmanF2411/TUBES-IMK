@@ -1,6 +1,4 @@
 // ====== Header Section Start ======
-// ====== Header Section End ======
-// DOM Elements
 const menuIcon = document.querySelector(".menu-icon");
 const navbar = document.querySelector(".navbar");
 const cart = document.querySelector(".cart");
@@ -8,22 +6,34 @@ const loginForm = document.querySelector(".login-form");
 const cartIcon = document.querySelector("#cart-icon");
 const userIcon = document.querySelector("#user-icon");
 
-// User elements
+
 const userNameContainer = document.querySelector(".user-name-container");
 const navbarUsername = document.getElementById("navbarUsername");
 const logoutBtn = document.getElementById("logoutBtn");
 
-// Form elements
+
 const loginFormElement = document.getElementById("loginForm");
 const forgotPasswordForm = document.getElementById("forgotPasswordForm");
 const createAccountForm = document.getElementById("createAccountForm");
 const resetPasswordForm = document.getElementById("resetPasswordForm");
 
-// Current user data
+
 let currentUser = JSON.parse(localStorage.getItem("currentUser")) || null;
 
-// Store original prices
+
 const originalPrices = new WeakMap();
+
+// Function to check if user is logged in
+function checkLogin() {
+  return currentUser !== null;
+}
+
+// Function to show login required message
+function showLoginRequired() {
+  showNotification("Silakan login terlebih dahulu untuk mengakses keranjang");
+  loginForm.classList.add("active");
+  cart.classList.remove("active");
+}
 
 // Toggle cart icon visibility
 function toggleCartIconVisibility() {
@@ -34,14 +44,6 @@ function toggleCartIconVisibility() {
   }
 }
 
-// function toggleUserIconVisibility() {
-//   if (navbar.classList.contains("active")) {
-//     userIcon.style.display = "none";
-//   } else {
-//     userIcon.style.display = "none";
-//   }
-// }
-
 // Toggle functions
 menuIcon.onclick = () => {
   navbar.classList.toggle("active");
@@ -50,10 +52,13 @@ menuIcon.onclick = () => {
   loginForm.classList.remove("active");
   closeDropdown();
   toggleCartIconVisibility();
-  toggleUserIconVisibility(); 
 };
 
 cartIcon.onclick = () => {
+  if (!checkLogin()) {
+    showLoginRequired();
+    return;
+  }
   cart.classList.toggle("active");
   navbar.classList.remove("active");
   menuIcon.classList.remove("move");
@@ -215,7 +220,7 @@ function showNotification(message) {
 
 // Redirect to home function
 function redirectToHome() {
-  window.location.href = "index.html"; // Ganti dengan URL halaman home Anda jika berbeda
+  window.location.href = "index.html";
 }
 
 // Event listeners
@@ -298,7 +303,6 @@ createAccountForm?.addEventListener("submit", function (e) {
   applyDiscounts();
   showNotification("Akun berhasil dibuat! Anda mendapatkan diskon 20%");
   
-  // Redirect to home after successful registration
   redirectToHome();
 });
 
@@ -423,6 +427,7 @@ updateNavbarUsername();
 if (localStorage.getItem("currentUser")) {
   applyDiscounts();
 }
+// ====== Header Section End ======
 // search button
 document.getElementById("search-btn").addEventListener("click", function () {
   var searchInput = document.getElementById("search");
@@ -548,12 +553,8 @@ searchInput.addEventListener("keypress", (e) => {
 
 // Keranjang
 document.addEventListener("DOMContentLoaded", function() {
-  // Cek apakah pengguna sudah login (contoh implementasi sederhana)
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-  const userCartKey = isLoggedIn ? `cart_${localStorage.getItem("userId")}` : "guest_cart";
-
-  // Jika pengguna tidak login, gunakan keranjang kosong
-  // Jika login, coba ambil dari localStorage, jika tidak ada gunakan array kosong
+  const isLoggedIn = checkLogin();
+  const userCartKey = isLoggedIn ? `cart_${currentUser?.email}` : "guest_cart";
   let cart = isLoggedIn ? JSON.parse(localStorage.getItem(userCartKey)) || [] : [];
 
   // DOM Elements
@@ -571,34 +572,6 @@ document.addEventListener("DOMContentLoaded", function() {
   const closeAccountBtn = document.querySelector(".close-account");
   const bankOptions = document.querySelectorAll(".bank-option");
   const confirmBtn = document.querySelector(".confirm-payment");
-
-  // Simulasikan login/logout untuk contoh
-  // Dalam implementasi nyata, ini akan dipanggil saat login/logout
-  function simulateLogin(userId) {
-    localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("userId", userId);
-    
-    // Pindahkan item dari guest cart ke user cart jika ada
-    const guestCart = JSON.parse(localStorage.getItem("guest_cart")) || [];
-    if (guestCart.length > 0) {
-      const userCartKey = `cart_${userId}`;
-      const existingUserCart = JSON.parse(localStorage.getItem(userCartKey)) || [];
-      const mergedCart = [...existingUserCart, ...guestCart];
-      localStorage.setItem(userCartKey, JSON.stringify(mergedCart));
-      localStorage.removeItem("guest_cart");
-      
-      // Update cart yang ditampilkan
-      cart = mergedCart;
-      updateCartDisplay();
-    }
-  }
-
-  function simulateLogout() {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("userId");
-    cart = [];
-    updateCartDisplay();
-  }
 
   // Toggle cart visibility
   function toggleCart(open = false) {
@@ -644,6 +617,10 @@ document.addEventListener("DOMContentLoaded", function() {
   if (cartToggle) {
     cartToggle.addEventListener("click", function(e) {
       e.preventDefault();
+      if (!checkLogin()) {
+        showLoginRequired();
+        return;
+      }
       toggleCart();
     });
   }
@@ -664,8 +641,6 @@ document.addEventListener("DOMContentLoaded", function() {
         cartItemsContainer.innerHTML = `<p class="empty-cart-message">Keranjang belanja kosong</p>`;
         document.querySelector(".total h3").textContent = "0 Items";
         document.querySelector(".total span").textContent = "Total Rp. 0";
-        
-        // Simpan keranjang kosong ke storage
         saveCartToStorage();
         return;
       }
@@ -737,16 +712,17 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   function saveCartToStorage() {
-    if (isLoggedIn) {
-      const userCartKey = `cart_${localStorage.getItem("userId")}`;
-      localStorage.setItem(userCartKey, JSON.stringify(cart));
-    } else {
-      localStorage.setItem("guest_cart", JSON.stringify(cart));
-    }
+    const userCartKey = checkLogin() ? `cart_${currentUser.email}` : "guest_cart";
+    localStorage.setItem(userCartKey, JSON.stringify(cart));
   }
 
   // Cart operations
   function addToCart(product) {
+    if (!checkLogin()) {
+      showLoginRequired();
+      return;
+    }
+    
     const existingIndex = cart.findIndex(item => 
       item.name === product.name && item.size === (product.size || null)
     );
@@ -799,7 +775,6 @@ document.addEventListener("DOMContentLoaded", function() {
     notification.innerHTML = `<span>${message}</span>`;
     document.body.appendChild(notification);
 
-    // Style the notification
     notification.style.position = "fixed";
     notification.style.bottom = "20px";
     notification.style.right = "20px";
@@ -813,13 +788,11 @@ document.addEventListener("DOMContentLoaded", function() {
     notification.style.backgroundColor = isError ? "#ff5252" : "#4CAF50";
     notification.style.color = "white";
 
-    // Show animation
     setTimeout(() => {
       notification.style.transform = "translateX(0)";
       notification.style.opacity = "1";
     }, 10);
 
-    // Hide after 2 seconds
     setTimeout(() => {
       notification.style.transform = "translateX(100%)";
       notification.style.opacity = "0";
@@ -840,6 +813,11 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   function processPayment(e) {
+    if (!checkLogin()) {
+      showLoginRequired();
+      return;
+    }
+    
     if (cart.length === 0) {
       e.preventDefault();
       showNotification("Keranjang belanja kosong! Silakan tambahkan produk terlebih dahulu.", true);
@@ -850,6 +828,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Buy Now functionality
   document.querySelector(".buy-now")?.addEventListener("click", function() {
+    if (!checkLogin()) {
+      showLoginRequired();
+      return;
+    }
+    
     const productName = document.querySelector(".product-name").textContent;
     const productPrice = document.querySelector(".current-price").textContent;
     const productImage = document.querySelector(".product-main-image").src;
@@ -864,7 +847,6 @@ document.addEventListener("DOMContentLoaded", function() {
       return;
     }
 
-    // Clear cart and add only this product
     cart = [];
     addToCart({
       name: productName,
@@ -874,10 +856,8 @@ document.addEventListener("DOMContentLoaded", function() {
       quantity: quantity
     });
 
-    // Open payment methods
     showPaymentMethods(new Event('click'));
     
-    // Ensure cart is open
     if (!cartElement.classList.contains("active")) {
       toggleCart(true);
     }
@@ -933,7 +913,6 @@ document.addEventListener("DOMContentLoaded", function() {
     confirmBtn.addEventListener("click", function(e) {
       e.preventDefault();
       
-      // Simple validation
       let isValid = true;
       const number = document.querySelector("#account-number").value.trim();
       const name = document.querySelector("#account-name").value.trim();
@@ -965,7 +944,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const activeMethod = document.querySelector(".payment-method.active");
         const method = activeMethod ? activeMethod.getAttribute("data-method") : "bank";
         
-        // Calculate total
         const total = cart.reduce((sum, item) => {
           const price = parseInt(item.price.replace(/\D/g, ""));
           return sum + price * item.quantity;
@@ -973,11 +951,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
         showNotification(`Pembayaran dengan ${method} berhasil! Total: Rp ${total.toLocaleString('id-ID')}`);
         
-        // Clear cart
         cart = [];
         updateCartDisplay();
         
-        // Close all modals
         accountModal.classList.remove("active");
         paymentModal.classList.remove("active");
         document.body.style.overflow = "";
@@ -987,6 +963,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Add to cart button
   document.querySelector(".add-to-cart")?.addEventListener("click", function() {
+    if (!checkLogin()) {
+      showLoginRequired();
+      return;
+    }
+    
     const productName = document.querySelector(".product-name").textContent;
     const productPrice = document.querySelector(".current-price").textContent;
     const productImage = document.querySelector(".product-main-image").src;
@@ -1015,6 +996,11 @@ document.addEventListener("DOMContentLoaded", function() {
     button.addEventListener("click", function(e) {
       e.preventDefault();
       e.stopPropagation();
+
+      if (!checkLogin()) {
+        showLoginRequired();
+        return;
+      }
 
       const box = this.closest(".box");
       const product = {
