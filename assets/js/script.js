@@ -924,7 +924,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Payment method selection
+  // Payment method selection 
   paymentMethods.forEach((method) => {
     method.addEventListener("click", function () {
       const paymentMethod = this.getAttribute("data-method");
