@@ -558,6 +558,14 @@ document.addEventListener("DOMContentLoaded", function () {
     ? JSON.parse(localStorage.getItem(userCartKey)) || []
     : [];
 
+  // Payment method variables
+  let selectedPaymentMethod = null;
+  let selectedBank = {
+    code: null,
+    name: null,
+    logo: null
+  };
+
   // DOM Elements
   const cartElement = document.querySelector(".cart");
   const cartContainer = document.querySelector(".cart-content");
@@ -635,7 +643,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Fungsi untuk membuat item keranjang bisa diklik
+  // Make cart items clickable
   function makeCartItemsClickable() {
     document
       .querySelectorAll(".cart-box img, .cart-box .cart-text h3")
@@ -648,22 +656,13 @@ document.addEventListener("DOMContentLoaded", function () {
             cartBox.querySelector(".remove-item").getAttribute("data-index")
           );
           const productName = cart[index].name;
-
-          // Simulasikan navigasi ke halaman detail produk
           navigateToProductDetail(productName);
         });
       });
   }
 
-  // Fungsi untuk navigasi ke halaman detail produk
   function navigateToProductDetail(productName) {
-    // Ganti dengan logika navigasi sesuai kebutuhan aplikasi Anda
     console.log(`Navigasi ke detail produk: ${productName}`);
-    Contoh: window.location.href = `ProductDetail.html?name=${encodeURIComponent(
-      productName
-    )}`;
-
-    // Untuk contoh, kita tampilkan notifikasi
     showNotification(`Membuka detail produk: ${productName}`);
   }
 
@@ -719,7 +718,6 @@ document.addEventListener("DOMContentLoaded", function () {
         cartItemsContainer.appendChild(cartBox);
       });
 
-      // Panggil fungsi untuk membuat item bisa diklik
       makeCartItemsClickable();
 
       // Update total
@@ -928,7 +926,8 @@ document.addEventListener("DOMContentLoaded", function () {
   paymentMethods.forEach((method) => {
     method.addEventListener("click", function () {
       const paymentMethod = this.getAttribute("data-method");
-
+      selectedPaymentMethod = paymentMethod;
+      
       paymentMethods.forEach((m) => m.classList.remove("active"));
       this.classList.add("active");
 
@@ -942,9 +941,15 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Bank selection
+  // Bank selection - integrated with your HTML structure
   bankOptions.forEach((bank) => {
     bank.addEventListener("click", function () {
+      selectedBank = {
+        code: this.getAttribute("data-bank"),
+        name: this.querySelector("span").textContent,
+        logo: this.querySelector("img").src
+      };
+      
       bankModal.classList.remove("active");
       accountModal.classList.add("active");
     });
@@ -1005,12 +1010,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       if (isValid) {
-        // Mendapatkan metode pembayaran yang dipilih
-        const activeMethod = document.querySelector(".payment-method.active");
-        const paymentMethod = activeMethod
-          ? activeMethod.getAttribute("data-method")
-          : "Metode Tidak Dipilih";
-
         // Create custom confirmation modal
         const confirmationModal = document.createElement('div');
         confirmationModal.className = 'custom-confirmation-modal';
@@ -1067,13 +1066,31 @@ document.addEventListener("DOMContentLoaded", function () {
                   <h4>Metode Pembayaran</h4>
                 </div>
                 <div class="payment-method-box">
-                  <div class="payment-method-icon">
-                    ${paymentMethod === 'bank' ? '<i class="ri-bank-line"></i>' : '<i class="ri-wallet-line"></i>'}
-                  </div>
-                  <div class="payment-method-info">
-                    <h5>${paymentMethod === 'bank' ? 'Transfer Bank' : 'E-Wallet'}</h5>
-                    <p>${paymentMethod === 'bank' ? 'Pembayaran melalui transfer bank' : 'Pembayaran melalui e-wallet'}</p>
-                  </div>
+                  ${selectedPaymentMethod === 'bank' ? `
+                    <div class="payment-method-icon">
+                      <img src="${selectedBank.logo}" alt="${selectedBank.name}" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+                    <div class="payment-method-info">
+                      <h5>Transfer Bank - ${selectedBank.name}</h5>
+                      <p>${selectedBank.code.toUpperCase()}</p>
+                    </div>
+                  ` : selectedPaymentMethod === 'cod' ? `
+                    <div class="payment-method-icon">
+                      <i class="ri-truck-line"></i>
+                    </div>
+                    <div class="payment-method-info">
+                      <h5>COD (Bayar di Tempat)</h5>
+                      <p>Pembayaran saat barang diterima</p>
+                    </div>
+                  ` : `
+                    <div class="payment-method-icon">
+                      <i class="ri-wallet-line"></i>
+                    </div>
+                    <div class="payment-method-info">
+                      <h5>E-Wallet</h5>
+                      <p>Pembayaran melalui e-wallet</p>
+                    </div>
+                  `}
                 </div>
               </div>
               
@@ -1119,359 +1136,364 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Add styles dynamically
         const style = document.createElement('style');
-          style.textContent = `
-            .custom-confirmation-modal {
-              position: fixed;
-              top: 0;
-              left: 0;
-              width: 100%;
-              height: 100%;
-              background: rgba(0, 0, 0, 0.6);
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              z-index: 9999;
-              animation: fadeIn 0.3s ease;
-              overflow-y: auto;
-              padding: 20px;
-            }
-            
-            @keyframes fadeIn {
-              from { opacity: 0; }
-              to { opacity: 1; }
-            }
-            
+        style.textContent = `
+          .custom-confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+            overflow-y: auto;
+            padding: 20px;
+          }
+          
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+          
+          .confirmation-dialog {
+            background: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(0);
+            animation: slideUp 0.4s ease;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+          }
+          
+          @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+          }
+          
+          .confirmation-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8080);
+            color: white;
+            display: flex;
+            align-items: center;
+            position: relative;
+          }
+          
+          .header-icon {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+          }
+          
+          .header-icon i {
+            font-size: 20px;
+          }
+          
+          .confirmation-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+          }
+          
+          .close-modal-btn {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.8;
+            transition: all 0.2s;
+            padding: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+          }
+          
+          .close-modal-btn:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.3);
+          }
+          
+          .confirmation-body {
+            padding: 0;
+            overflow-y: auto;
+            flex: 1;
+          }
+          
+          .confirmation-section {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+          }
+          
+          .section-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+          }
+          
+          .section-title i {
+            font-size: 18px;
+            color: #ff6b6b;
+            margin-right: 8px;
+          }
+          
+          .section-title h4 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+          }
+          
+          .product-list {
+            max-height: 220px;
+            overflow-y: auto;
+          }
+          
+          .product-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+          }
+          
+          .product-item:last-child {
+            border-bottom: none;
+          }
+          
+          .product-image {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-right: 12px;
+            background: #f9f9f9;
+          }
+          
+          .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+          
+          .product-info {
+            flex: 1;
+          }
+          
+          .product-info h5 {
+            margin: 0 0 4px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+          }
+          
+          .product-meta {
+            display: flex;
+            gap: 10px;
+            font-size: 12px;
+            color: #666;
+          }
+          
+          .product-price {
+            font-weight: 600;
+            color: #ff6b6b;
+            font-size: 14px;
+          }
+          
+          .address-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 14px;
+            color: #333;
+            border: 1px dashed #ddd;
+          }
+          
+          .address-box p {
+            margin: 0;
+            line-height: 1.4;
+          }
+          
+          .payment-method-box {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px dashed #ddd;
+          }
+          
+          .payment-method-icon {
+            background:rgb(105, 98, 98);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+          }
+          
+          .payment-method-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+          }
+          
+          .payment-method-icon i {
+            font-size: 20px;
+          }
+          
+          .payment-method-info h5 {
+            margin: 0 0 5px;
+            font-size: 14px;
+            font-weight: 600;
+          }
+          
+          .payment-method-info p {
+            margin: 0;
+            font-size: 12px;
+            color: #666;
+          }
+          
+          .order-summary {
+            padding: 20px;
+            background: #f9fafc;
+          }
+          
+          .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #555;
+          }
+          
+          .summary-item.discount {
+            color: #4CAF50;
+          }
+          
+          .summary-total {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 12px;
+            border-top: 1px dashed #ddd;
+            font-weight: 600;
+            font-size: 16px;
+            color: #333;
+          }
+          
+          .summary-total span:last-child {
+            color: #ff6b6b;
+            font-size: 18px;
+          }
+          
+          .confirmation-footer {
+            display: flex;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            gap: 12px;
+          }
+          
+          .confirmation-footer button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 14px;
+          }
+          
+          .cancel-btn {
+            background: white;
+            color: #555;
+            border: 1px solid #ddd !important;
+            flex: 0.4;
+          }
+          
+          .cancel-btn:hover {
+            background: #f2f2f2;
+          }
+          
+          .confirm-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff8080);
+            color: white;
+            flex: 0.6;
+            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
+          }
+          
+          .confirm-btn:hover {
+            background: linear-gradient(135deg, #ff5b5b, #ff7070);
+            box-shadow: 0 6px 12px rgba(255, 107, 107, 0.4);
+          }
+          
+          .confirmation-footer button i {
+            font-size: 16px;
+            margin: 0 6px;
+          }
+          
+          @media (max-width: 480px) {
             .confirmation-dialog {
-              background: white;
-              border-radius: 16px;
-              width: 90%;
-              max-width: 500px;
-              overflow: hidden;
-              box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-              transform: translateY(0);
-              animation: slideUp 0.4s ease;
-              max-height: 85vh;
-              display: flex;
-              flex-direction: column;
-            }
-            
-            @keyframes slideUp {
-              from { transform: translateY(30px); opacity: 0; }
-              to { transform: translateY(0); opacity: 1; }
-            }
-            
-            .confirmation-header {
-              padding: 20px;
-              background: linear-gradient(135deg, #ff6b6b, #ff8080);
-              color: white;
-              display: flex;
-              align-items: center;
-              position: relative;
-            }
-            
-            .header-icon {
-              background: rgba(255, 255, 255, 0.2);
-              border-radius: 50%;
-              width: 40px;
-              height: 40px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              margin-right: 12px;
-            }
-            
-            .header-icon i {
-              font-size: 20px;
-            }
-            
-            .confirmation-header h3 {
-              margin: 0;
-              font-size: 18px;
-              font-weight: 600;
-            }
-            
-            .close-modal-btn {
-              position: absolute;
-              right: 15px;
-              top: 15px;
-              background: none;
-              border: none;
-              color: white;
-              cursor: pointer;
-              font-size: 20px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              opacity: 0.8;
-              transition: all 0.2s;
-              padding: 0;
-              width: 28px;
-              height: 28px;
-              border-radius: 50%;
-              background: rgba(255, 255, 255, 0.2);
-            }
-            
-            .close-modal-btn:hover {
-              opacity: 1;
-              background: rgba(255, 255, 255, 0.3);
-            }
-            
-            .confirmation-body {
-              padding: 0;
-              overflow-y: auto;
-              flex: 1;
-            }
-            
-            .confirmation-section {
-              padding: 15px 20px;
-              border-bottom: 1px solid #eee;
-            }
-            
-            .section-title {
-              display: flex;
-              align-items: center;
-              margin-bottom: 12px;
-            }
-            
-            .section-title i {
-              font-size: 18px;
-              color: #ff6b6b;
-              margin-right: 8px;
-            }
-            
-            .section-title h4 {
-              margin: 0;
-              font-size: 16px;
-              font-weight: 600;
-              color: #333;
-            }
-            
-            .product-list {
-              max-height: 220px;
-              overflow-y: auto;
-            }
-            
-            .product-item {
-              display: flex;
-              align-items: center;
-              padding: 10px 0;
-              border-bottom: 1px solid #f0f0f0;
-            }
-            
-            .product-item:last-child {
-              border-bottom: none;
+              width: 100%;
+              max-height: 80vh;
             }
             
             .product-image {
-              width: 50px;
-              height: 50px;
-              border-radius: 8px;
-              overflow: hidden;
-              margin-right: 12px;
-              background: #f9f9f9;
-            }
-            
-            .product-image img {
-              width: 100%;
-              height: 100%;
-              object-fit: cover;
-            }
-            
-            .product-info {
-              flex: 1;
-            }
-            
-            .product-info h5 {
-              margin: 0 0 4px;
-              font-size: 14px;
-              font-weight: 500;
-              color: #333;
-            }
-            
-            .product-meta {
-              display: flex;
-              gap: 10px;
-              font-size: 12px;
-              color: #666;
-            }
-            
-            .product-price {
-              font-weight: 600;
-              color: #ff6b6b;
-              font-size: 14px;
-            }
-            
-            .address-box {
-              background: #f8f9fa;
-              border-radius: 8px;
-              padding: 12px 15px;
-              font-size: 14px;
-              color: #333;
-              border: 1px dashed #ddd;
-            }
-            
-            .address-box p {
-              margin: 0;
-              line-height: 1.4;
-            }
-            
-            .payment-method-box {
-              display: flex;
-              align-items: center;
-              background: #f8f9fa;
-              border-radius: 8px;
-              padding: 15px;
-              border: 1px dashed #ddd;
-            }
-            
-            .payment-method-icon {
-              background: #ff6b6b;
-              color: white;
               width: 40px;
               height: 40px;
-              border-radius: 8px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              margin-right: 15px;
-            }
-            
-            .payment-method-icon i {
-              font-size: 20px;
-            }
-            
-            .payment-method-info h5 {
-              margin: 0 0 5px;
-              font-size: 14px;
-              font-weight: 600;
-            }
-            
-            .payment-method-info p {
-              margin: 0;
-              font-size: 12px;
-              color: #666;
-            }
-            
-            .order-summary {
-              padding: 20px;
-              background: #f9fafc;
-            }
-            
-            .summary-item {
-              display: flex;
-              justify-content: space-between;
-              margin-bottom: 12px;
-              font-size: 14px;
-              color: #555;
-            }
-            
-            .summary-item.discount {
-              color: #4CAF50;
-            }
-            
-            .summary-total {
-              display: flex;
-              justify-content: space-between;
-              padding-top: 12px;
-              border-top: 1px dashed #ddd;
-              font-weight: 600;
-              font-size: 16px;
-              color: #333;
-            }
-            
-            .summary-total span:last-child {
-              color: #ff6b6b;
-              font-size: 18px;
             }
             
             .confirmation-footer {
-              display: flex;
-              padding: 15px 20px;
-              background: #f8f9fa;
-              gap: 12px;
+              flex-direction: column;
             }
             
             .confirmation-footer button {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              padding: 14px;
-              border-radius: 8px;
-              font-weight: 600;
-              cursor: pointer;
-              transition: all 0.2s;
-              border: none;
-              font-size: 14px;
+              width: 100%;
             }
-            
-            .cancel-btn {
-              background: white;
-              color: #555;
-              border: 1px solid #ddd !important;
-              flex: 0.4;
-            }
-            
-            .cancel-btn:hover {
-              background: #f2f2f2;
-            }
-            
-            .confirm-btn {
-              background: linear-gradient(135deg, #ff6b6b, #ff8080);
-              color: white;
-              flex: 0.6;
-              box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
-            }
-            
-            .confirm-btn:hover {
-              background: linear-gradient(135deg, #ff5b5b, #ff7070);
-              box-shadow: 0 6px 12px rgba(255, 107, 107, 0.4);
-            }
-            
-            .confirmation-footer button i {
-              font-size: 16px;
-              margin: 0 6px;
-            }
-            
-            /* Responsive adjustments */
-            @media (max-width: 480px) {
-              .confirmation-dialog {
-                width: 100%;
-                max-height: 80vh;
-              }
-              
-              .product-image {
-                width: 40px;
-                height: 40px;
-              }
-              
-              .confirmation-footer {
-                flex-direction: column;
-              }
-              
-              .confirmation-footer button {
-                width: 100%;
-              }
-            }
-            
-            /* Scrollbar styling */
-            .product-list::-webkit-scrollbar {
-              width: 4px;
-            }
-            
-            .product-list::-webkit-scrollbar-track {
-              background: #f1f1f1;
-              border-radius: 4px;
-            }
-            
-            .product-list::-webkit-scrollbar-thumb {
-              background: #ddd;
-              border-radius: 4px;
-            }
-            
-            .product-list::-webkit-scrollbar-thumb:hover {
-              background: #ccc;
-            }
-          `;
+          }
+          
+          .product-list::-webkit-scrollbar {
+            width: 4px;
+          }
+          
+          .product-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+          }
+          
+          .product-list::-webkit-scrollbar-thumb {
+            background: #ddd;
+            border-radius: 4px;
+          }
+          
+          .product-list::-webkit-scrollbar-thumb:hover {
+            background: #ccc;
+          }
+        `;
         document.head.appendChild(style);
 
         // Handle button clicks
@@ -1495,7 +1517,7 @@ document.addEventListener("DOMContentLoaded", function () {
               return sum + price * item.quantity;
             }, 0);
 
-            // Show success notification with animation
+            // Show success notification
             const successNotification = document.createElement("div");
             successNotification.className = "payment-success-notification";
             successNotification.innerHTML = `
@@ -1509,7 +1531,6 @@ document.addEventListener("DOMContentLoaded", function () {
           `;
             document.body.appendChild(successNotification);
 
-            // Add success styles
             const successStyle = document.createElement("style");
             successStyle.textContent = `
             .payment-success-notification {
@@ -1667,7 +1688,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Add animation and remove after 5 seconds
     setTimeout(() => {
       notification.style.animation = "slideOut 0.5s ease-out";
-      setTimeout(() => notification.remove(), 500); // Wait for fade-out animation to complete
+      setTimeout(() => notification.remove(), 500);
     }, 5000);
   }
 
@@ -1677,6 +1698,8 @@ document.addEventListener("DOMContentLoaded", function () {
       element: box,
       name: box.querySelector("h3").textContent.trim(),
       position: Array.from(productBoxes).indexOf(box),
+      detailUrl: box.getAttribute("onclick")?.match(/'([^']+)'/)?.[1] || null,
+      isSale: box.querySelector(".badge.sale") !== null
     };
   });
 
@@ -1766,6 +1789,10 @@ document.addEventListener("DOMContentLoaded", function () {
     productBoxes.forEach((box) => {
       const heartIcon = box.querySelector(".wishlist");
       const saleBadge = box.querySelector(".badge.sale");
+      const productData = originalPositions.find(item => item.element === box);
+
+      // Remove existing onclick handler to avoid conflicts
+      box.removeAttribute("onclick");
 
       if (heartIcon) {
         // Remove existing listener to prevent duplicates
@@ -1776,24 +1803,21 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       }
 
-      // Handle click on products with "SALE" badge
-      if (saleBadge) {
-        box.style.opacity = "0.6";
-        box.addEventListener("click", function (e) {
-          e.preventDefault(); // Prevent default behavior
-          showNotification("Maaf, produk ini telah habis terjual.", true); // Show custom notification
-        });
-      } else {
-        // Normal click behavior for other products
-        box.onclick = function (e) {
-          if (
-            !e.target.closest(".wishlist") &&
-            !e.target.closest('a[title="Add to Cart"]')
-          ) {
-            window.location.href = "productDetail.html";
-          }
-        };
-      }
+      // Handle product box click
+      box.addEventListener("click", function (e) {
+        // Don't navigate if clicking wishlist or cart
+        if (e.target.closest(".wishlist") || e.target.closest('a[title="Add to Cart"]')) {
+          return;
+        }
+
+        // Check if product is on sale
+        if (productData?.isSale) {
+          e.preventDefault();
+          showNotification("Maaf, produk ini telah habis terjual.", true);
+        } else if (productData?.detailUrl) {
+          window.location.href = productData.detailUrl;
+        }
+      });
     });
   }
 
@@ -1826,6 +1850,12 @@ document.addEventListener("DOMContentLoaded", function () {
           badgeElement,
           originalPositions[badge.index].element.firstChild
         );
+        
+        // Mark product as sale if it has sale badge
+        if (badge.className === "badge sale") {
+          originalPositions[badge.index].isSale = true;
+          originalPositions[badge.index].element.style.opacity = "0.6";
+        }
       }
     });
   }
@@ -1887,7 +1917,7 @@ document.addEventListener("DOMContentLoaded", function () {
       z-index: 1000;
     }
     .notification.error {
-      background: #FF4D4D; /* Red background for error messages */
+      background: #FF4D4D;
     }
     @keyframes slideIn {
       from {
