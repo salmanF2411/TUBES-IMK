@@ -26,7 +26,10 @@ function checkLogin() {
 
 // Function to show login required message
 function showLoginRequired() {
-  showNotification("Silakan login terlebih dahulu untuk mengakses keranjang", true);
+  showNotification(
+    "Silakan login terlebih dahulu untuk mengakses keranjang",
+    true
+  );
   loginForm.classList.add("active");
   cart.classList.remove("active");
 }
@@ -43,13 +46,13 @@ function toggleCartIconVisibility() {
 // Notification function
 function showNotification(message, isError = false) {
   // Remove old notification if exists
-  const oldNotification = document.querySelector('.notification');
+  const oldNotification = document.querySelector(".notification");
   if (oldNotification) {
     oldNotification.remove();
   }
 
   const notification = document.createElement("div");
-  notification.className = `notification ${isError ? 'error' : ''}`;
+  notification.className = `notification ${isError ? "error" : ""}`;
   notification.textContent = message;
 
   document.body.appendChild(notification);
@@ -250,7 +253,10 @@ createAccountForm?.addEventListener("submit", function (e) {
   ).value;
 
   if (!isValidUsername(name)) {
-    showNotification("Username harus 3-30 karakter dan bisa mengandung huruf, angka, dan spasi", true);
+    showNotification(
+      "Username harus 3-30 karakter dan bisa mengandung huruf, angka, dan spasi",
+      true
+    );
     return;
   }
 
@@ -344,7 +350,9 @@ resetPasswordForm?.addEventListener("submit", function (e) {
       localStorage.setItem("currentUser", JSON.stringify(currentUser));
     }
 
-    showNotification("Password berhasil diubah! Silakan login dengan password baru");
+    showNotification(
+      "Password berhasil diubah! Silakan login dengan password baru"
+    );
     this.reset();
     resetPasswordForm.classList.remove("active");
     loginFormElement.classList.add("active");
@@ -965,37 +973,37 @@ document.addEventListener("DOMContentLoaded", function () {
   if (confirmBtn) {
     confirmBtn.addEventListener("click", function (e) {
       e.preventDefault();
-  
+
       let isValid = true;
       const number = document.querySelector("#account-number").value.trim();
       const name = document.querySelector("#account-name").value.trim();
       const address = document.querySelector("#alamat").value.trim();
-  
+
       document.querySelectorAll(".error-message").forEach((el) => {
         el.style.display = "none";
       });
-  
+
       if (!number) {
         document.getElementById("number-error").textContent =
           "Nomor rekening/HP harus diisi";
         document.getElementById("number-error").style.display = "block";
         isValid = false;
       }
-  
+
       if (!name) {
         document.getElementById("name-error").textContent =
           "Nama pemilik harus diisi";
         document.getElementById("name-error").style.display = "block";
         isValid = false;
       }
-  
+
       if (!address) {
         document.getElementById("address-error").textContent =
           "Alamat harus diisi";
         document.getElementById("address-error").style.display = "block";
         isValid = false;
       }
-  
+
       if (isValid) {
         // Mendapatkan metode pembayaran yang dipilih
         const activeMethod = document.querySelector(".payment-method.active");
@@ -1009,196 +1017,488 @@ document.addEventListener("DOMContentLoaded", function () {
         confirmationModal.innerHTML = `
           <div class="confirmation-dialog">
             <div class="confirmation-header">
-              <i class="ri-question-line"></i>
-              <h3>Konfirmasi Pembayaran</h3>
+              <div class="header-icon">
+                <i class="ri-shopping-bag-line"></i>
+              </div>
+              <h3>Konfirmasi Pesanan</h3>
+              <button class="close-modal-btn"><i class="ri-close-line"></i></button>
             </div>
+            
             <div class="confirmation-body">
-              <p>Apakah Anda yakin ingin melakukan pembayaran ini?</p>
-              <div class="order-summary">
-                <h4>Ringkasan Pesanan</h4>
-                <ul>
+              <div class="confirmation-section">
+                <div class="section-title">
+                  <i class="ri-shopping-cart-2-line"></i>
+                  <h4>Produk yang Dibeli</h4>
+                </div>
+                <div class="product-list">
                   ${cart.map(item => `
-                    <li>
-                      <span>${item.name} (${item.size || '-'})</span>
-                      <span>${item.quantity}x ${item.price}</span>
-                    </li>
+                    <div class="product-item">
+                      <div class="product-image">
+                        <img src="${item.image}" alt="${item.name}">
+                      </div>
+                      <div class="product-info">
+                        <h5>${item.name}</h5>
+                        <div class="product-meta">
+                          <span class="product-size">Ukuran: ${item.size || '-'}</span>
+                          <span class="product-qty">Qty: ${item.quantity}</span>
+                        </div>
+                      </div>
+                      <div class="product-price">
+                        ${item.price}
+                      </div>
+                    </div>
                   `).join('')}
-                </ul>
-                <div class="total-summary">
-                  <span>Total Pembayaran:</span>
-                  <span class="total-price">Rp ${cart.reduce((sum, item) => {
+                </div>
+              </div>
+              
+              <div class="confirmation-section">
+                <div class="section-title">
+                  <i class="ri-map-pin-line"></i>
+                  <h4>Alamat Pengiriman</h4>
+                </div>
+                <div class="address-box">
+                  <p>${address}</p>
+                </div>
+              </div>
+              
+              <div class="confirmation-section">
+                <div class="section-title">
+                  <i class="ri-bank-card-line"></i>
+                  <h4>Metode Pembayaran</h4>
+                </div>
+                <div class="payment-method-box">
+                  <div class="payment-method-icon">
+                    ${paymentMethod === 'bank' ? '<i class="ri-bank-line"></i>' : '<i class="ri-wallet-line"></i>'}
+                  </div>
+                  <div class="payment-method-info">
+                    <h5>${paymentMethod === 'bank' ? 'Transfer Bank' : 'E-Wallet'}</h5>
+                    <p>${paymentMethod === 'bank' ? 'Pembayaran melalui transfer bank' : 'Pembayaran melalui e-wallet'}</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="order-summary">
+                <div class="summary-item">
+                  <span>Subtotal</span>
+                  <span>Rp ${cart.reduce((sum, item) => {
                     const price = parseInt(item.price.replace(/\D/g, ""));
                     return sum + price * item.quantity;
                   }, 0).toLocaleString("id-ID")}</span>
                 </div>
-                <!-- Menampilkan metode pembayaran -->
-                <div class="payment-method-summary">
-                  <span>Metode Pembayaran:</span>
-                  <span>${paymentMethod}</span>
+                <div class="summary-item">
+                  <span>Biaya Pengiriman</span>
+                  <span>Rp 0</span>
+                </div>
+                <div class="summary-item discount">
+                  <span>Diskon</span>
+                  <span>-Rp 0</span>
+                </div>
+                <div class="summary-total">
+                  <span>Total Pembayaran</span>
+                  <span>Rp ${cart.reduce((sum, item) => {
+                    const price = parseInt(item.price.replace(/\D/g, ""));
+                    return sum + price * item.quantity;
+                  }, 0).toLocaleString("id-ID")}</span>
                 </div>
               </div>
             </div>
+            
             <div class="confirmation-footer">
-              <button class="cancel-btn">Batal</button>
-              <button class="confirm-btn">Ya, Lanjutkan Pembayaran</button>
+              <button class="cancel-btn">
+                <i class="ri-arrow-left-line"></i> Kembali
+              </button>
+              <button class="confirm-btn">
+                Bayar Sekarang <i class="ri-arrow-right-line"></i>
+              </button>
             </div>
           </div>
         `;
-        
+
         document.body.appendChild(confirmationModal);
-        document.body.style.overflow = 'hidden';
-  
+        document.body.style.overflow = "hidden";
+
         // Add styles dynamically
         const style = document.createElement('style');
-        style.textContent = `
-          .custom-confirmation-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            animation: fadeIn 0.3s ease;
-          }
-          @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-          }
-          .confirmation-dialog {
-            background: white;
-            border-radius: 16px;
-            width: 90%;
-            max-width: 400px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            transform: translateY(0);
-            animation: slideUp 0.3s ease;
-          }
-          @keyframes slideUp {
-            from { transform: translateY(20px); }
-            to { transform: translateY(0); }
-          }
-          .confirmation-header {
-            padding: 20px;
-            background: #f8f9fa;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px solid #eee;
-          }
-          .confirmation-header i {
-            font-size: 24px;
-            color: #ff6b6b;
-          }
-          .confirmation-header h3 {
-            margin: 0;
-            font-size: 18px;
-            color: #333;
-          }
-          .confirmation-body {
-            padding: 20px;
-          }
-          .confirmation-body p {
-            margin: 0 0 15px;
-            color: #555;
-          }
-          .order-summary {
-            background: #f9f9f9;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
-          }
-          .order-summary h4 {
-            margin: 0 0 10px;
-            font-size: 16px;
-            color: #333;
-          }
-          .order-summary ul {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 15px;
-          }
-          .order-summary li {
-            display: flex;
-            justify-content: space-between;
-            padding: 5px 0;
-            font-size: 14px;
-          }
-          .total-summary {
-            display: flex;
-            justify-content: space-between;
-            padding-top: 10px;
-            border-top: 1px solid #eee;
-            font-weight: bold;
-          }
-          .total-price {
-            color: #ff6b6b;
-          }
-          .payment-method-summary {
-            display: flex;
-            justify-content: space-between;
-            padding-top: 10px;
-            border-top: 1px solid #eee;
-            font-weight: bold;
-          }
-          .confirmation-footer {
-            display: flex;
-            padding: 15px;
-            border-top: 1px solid #eee;
-            gap: 10px;
-          }
-          .confirmation-footer button {
-            flex: 1;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-          }
-          .cancel-btn {
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            color: #555;
-          }
-          .cancel-btn:hover {
-            background: #e9ecef;
-          }
-          .confirm-btn {
-            background: #ff6b6b;
-            border: none;
-            color: white;
-          }
-          .confirm-btn:hover {
-            background: #e53935;
-          }
-        `;
+          style.textContent = `
+            .custom-confirmation-modal {
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: rgba(0, 0, 0, 0.6);
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              z-index: 9999;
+              animation: fadeIn 0.3s ease;
+              overflow-y: auto;
+              padding: 20px;
+            }
+            
+            @keyframes fadeIn {
+              from { opacity: 0; }
+              to { opacity: 1; }
+            }
+            
+            .confirmation-dialog {
+              background: white;
+              border-radius: 16px;
+              width: 90%;
+              max-width: 500px;
+              overflow: hidden;
+              box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+              transform: translateY(0);
+              animation: slideUp 0.4s ease;
+              max-height: 85vh;
+              display: flex;
+              flex-direction: column;
+            }
+            
+            @keyframes slideUp {
+              from { transform: translateY(30px); opacity: 0; }
+              to { transform: translateY(0); opacity: 1; }
+            }
+            
+            .confirmation-header {
+              padding: 20px;
+              background: linear-gradient(135deg, #ff6b6b, #ff8080);
+              color: white;
+              display: flex;
+              align-items: center;
+              position: relative;
+            }
+            
+            .header-icon {
+              background: rgba(255, 255, 255, 0.2);
+              border-radius: 50%;
+              width: 40px;
+              height: 40px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin-right: 12px;
+            }
+            
+            .header-icon i {
+              font-size: 20px;
+            }
+            
+            .confirmation-header h3 {
+              margin: 0;
+              font-size: 18px;
+              font-weight: 600;
+            }
+            
+            .close-modal-btn {
+              position: absolute;
+              right: 15px;
+              top: 15px;
+              background: none;
+              border: none;
+              color: white;
+              cursor: pointer;
+              font-size: 20px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              opacity: 0.8;
+              transition: all 0.2s;
+              padding: 0;
+              width: 28px;
+              height: 28px;
+              border-radius: 50%;
+              background: rgba(255, 255, 255, 0.2);
+            }
+            
+            .close-modal-btn:hover {
+              opacity: 1;
+              background: rgba(255, 255, 255, 0.3);
+            }
+            
+            .confirmation-body {
+              padding: 0;
+              overflow-y: auto;
+              flex: 1;
+            }
+            
+            .confirmation-section {
+              padding: 15px 20px;
+              border-bottom: 1px solid #eee;
+            }
+            
+            .section-title {
+              display: flex;
+              align-items: center;
+              margin-bottom: 12px;
+            }
+            
+            .section-title i {
+              font-size: 18px;
+              color: #ff6b6b;
+              margin-right: 8px;
+            }
+            
+            .section-title h4 {
+              margin: 0;
+              font-size: 16px;
+              font-weight: 600;
+              color: #333;
+            }
+            
+            .product-list {
+              max-height: 220px;
+              overflow-y: auto;
+            }
+            
+            .product-item {
+              display: flex;
+              align-items: center;
+              padding: 10px 0;
+              border-bottom: 1px solid #f0f0f0;
+            }
+            
+            .product-item:last-child {
+              border-bottom: none;
+            }
+            
+            .product-image {
+              width: 50px;
+              height: 50px;
+              border-radius: 8px;
+              overflow: hidden;
+              margin-right: 12px;
+              background: #f9f9f9;
+            }
+            
+            .product-image img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+            
+            .product-info {
+              flex: 1;
+            }
+            
+            .product-info h5 {
+              margin: 0 0 4px;
+              font-size: 14px;
+              font-weight: 500;
+              color: #333;
+            }
+            
+            .product-meta {
+              display: flex;
+              gap: 10px;
+              font-size: 12px;
+              color: #666;
+            }
+            
+            .product-price {
+              font-weight: 600;
+              color: #ff6b6b;
+              font-size: 14px;
+            }
+            
+            .address-box {
+              background: #f8f9fa;
+              border-radius: 8px;
+              padding: 12px 15px;
+              font-size: 14px;
+              color: #333;
+              border: 1px dashed #ddd;
+            }
+            
+            .address-box p {
+              margin: 0;
+              line-height: 1.4;
+            }
+            
+            .payment-method-box {
+              display: flex;
+              align-items: center;
+              background: #f8f9fa;
+              border-radius: 8px;
+              padding: 15px;
+              border: 1px dashed #ddd;
+            }
+            
+            .payment-method-icon {
+              background: #ff6b6b;
+              color: white;
+              width: 40px;
+              height: 40px;
+              border-radius: 8px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin-right: 15px;
+            }
+            
+            .payment-method-icon i {
+              font-size: 20px;
+            }
+            
+            .payment-method-info h5 {
+              margin: 0 0 5px;
+              font-size: 14px;
+              font-weight: 600;
+            }
+            
+            .payment-method-info p {
+              margin: 0;
+              font-size: 12px;
+              color: #666;
+            }
+            
+            .order-summary {
+              padding: 20px;
+              background: #f9fafc;
+            }
+            
+            .summary-item {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 12px;
+              font-size: 14px;
+              color: #555;
+            }
+            
+            .summary-item.discount {
+              color: #4CAF50;
+            }
+            
+            .summary-total {
+              display: flex;
+              justify-content: space-between;
+              padding-top: 12px;
+              border-top: 1px dashed #ddd;
+              font-weight: 600;
+              font-size: 16px;
+              color: #333;
+            }
+            
+            .summary-total span:last-child {
+              color: #ff6b6b;
+              font-size: 18px;
+            }
+            
+            .confirmation-footer {
+              display: flex;
+              padding: 15px 20px;
+              background: #f8f9fa;
+              gap: 12px;
+            }
+            
+            .confirmation-footer button {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: 14px;
+              border-radius: 8px;
+              font-weight: 600;
+              cursor: pointer;
+              transition: all 0.2s;
+              border: none;
+              font-size: 14px;
+            }
+            
+            .cancel-btn {
+              background: white;
+              color: #555;
+              border: 1px solid #ddd !important;
+              flex: 0.4;
+            }
+            
+            .cancel-btn:hover {
+              background: #f2f2f2;
+            }
+            
+            .confirm-btn {
+              background: linear-gradient(135deg, #ff6b6b, #ff8080);
+              color: white;
+              flex: 0.6;
+              box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
+            }
+            
+            .confirm-btn:hover {
+              background: linear-gradient(135deg, #ff5b5b, #ff7070);
+              box-shadow: 0 6px 12px rgba(255, 107, 107, 0.4);
+            }
+            
+            .confirmation-footer button i {
+              font-size: 16px;
+              margin: 0 6px;
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 480px) {
+              .confirmation-dialog {
+                width: 100%;
+                max-height: 80vh;
+              }
+              
+              .product-image {
+                width: 40px;
+                height: 40px;
+              }
+              
+              .confirmation-footer {
+                flex-direction: column;
+              }
+              
+              .confirmation-footer button {
+                width: 100%;
+              }
+            }
+            
+            /* Scrollbar styling */
+            .product-list::-webkit-scrollbar {
+              width: 4px;
+            }
+            
+            .product-list::-webkit-scrollbar-track {
+              background: #f1f1f1;
+              border-radius: 4px;
+            }
+            
+            .product-list::-webkit-scrollbar-thumb {
+              background: #ddd;
+              border-radius: 4px;
+            }
+            
+            .product-list::-webkit-scrollbar-thumb:hover {
+              background: #ccc;
+            }
+          `;
         document.head.appendChild(style);
-  
+
         // Handle button clicks
-        confirmationModal.querySelector('.cancel-btn').addEventListener('click', () => {
-          confirmationModal.remove();
-          style.remove();
-          document.body.style.overflow = '';
-        });
-  
-        confirmationModal.querySelector('.confirm-btn').addEventListener('click', () => {
-          confirmationModal.remove();
-          style.remove();
-          document.body.style.overflow = '';
-  
-          const total = cart.reduce((sum, item) => {
-            const price = parseInt(item.price.replace(/\D/g, ""));
-            return sum + price * item.quantity;
-          }, 0);
-  
-          // Show success notification with animation
-          const successNotification = document.createElement('div');
-          successNotification.className = 'payment-success-notification';
-          successNotification.innerHTML = `
+        confirmationModal
+          .querySelector(".cancel-btn")
+          .addEventListener("click", () => {
+            confirmationModal.remove();
+            style.remove();
+            document.body.style.overflow = "";
+          });
+
+        confirmationModal
+          .querySelector(".confirm-btn")
+          .addEventListener("click", () => {
+            confirmationModal.remove();
+            style.remove();
+            document.body.style.overflow = "";
+
+            const total = cart.reduce((sum, item) => {
+              const price = parseInt(item.price.replace(/\D/g, ""));
+              return sum + price * item.quantity;
+            }, 0);
+
+            // Show success notification with animation
+            const successNotification = document.createElement("div");
+            successNotification.className = "payment-success-notification";
+            successNotification.innerHTML = `
             <div class="success-content">
               <i class="ri-checkbox-circle-fill"></i>
               <div>
@@ -1207,11 +1507,11 @@ document.addEventListener("DOMContentLoaded", function () {
               </div>
             </div>
           `;
-          document.body.appendChild(successNotification);
-  
-          // Add success styles
-          const successStyle = document.createElement('style');
-          successStyle.textContent = `
+            document.body.appendChild(successNotification);
+
+            // Add success styles
+            const successStyle = document.createElement("style");
+            successStyle.textContent = `
             .payment-success-notification {
               position: fixed;
               bottom: 20px;
@@ -1251,22 +1551,22 @@ document.addEventListener("DOMContentLoaded", function () {
               opacity: 0.9;
             }
           `;
-          document.head.appendChild(successStyle);
-  
-          // Clear cart after successful payment
-          cart = [];
-          updateCartDisplay();
-  
-          // Close modals
-          accountModal.classList.remove("active");
-          paymentModal.classList.remove("active");
-  
-          // Remove elements after animation
-          setTimeout(() => {
-            successNotification.remove();
-            successStyle.remove();
-          }, 5000);
-        });
+            document.head.appendChild(successStyle);
+
+            // Clear cart after successful payment
+            cart = [];
+            updateCartDisplay();
+
+            // Close modals
+            accountModal.classList.remove("active");
+            paymentModal.classList.remove("active");
+
+            // Remove elements after animation
+            setTimeout(() => {
+              successNotification.remove();
+              successStyle.remove();
+            }, 5000);
+          });
       }
     });
   }
@@ -1351,14 +1651,14 @@ document.addEventListener("DOMContentLoaded", function () {
   // Notification function
   function showNotification(message, isError = false) {
     // Remove old notification if exists
-    const oldNotification = document.querySelector('.notification');
+    const oldNotification = document.querySelector(".notification");
     if (oldNotification) {
       oldNotification.remove();
     }
 
     // Create new notification element
     const notification = document.createElement("div");
-    notification.className = `notification ${isError ? 'error' : ''}`;
+    notification.className = `notification ${isError ? "error" : ""}`;
     notification.textContent = message;
 
     // Append notification to the body
@@ -1478,7 +1778,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Handle click on products with "SALE" badge
       if (saleBadge) {
-        box.style.opacity = "0.6"; 
+        box.style.opacity = "0.6";
         box.addEventListener("click", function (e) {
           e.preventDefault(); // Prevent default behavior
           showNotification("Maaf, produk ini telah habis terjual.", true); // Show custom notification
