@@ -21,16 +21,15 @@
       href="assets/images/favicon.ico"
       type="image/x-icon"
     />
-    
   </head>
   <style>
-     .search-container {
+    .search-container {
       display: none;
     }
   </style>
 
   <body>
-      <!-- header -->
+    <!-- header -->
     <header>
       <div class="nav container">
         <div class="menu-icon" aria-label="Toggle Navigation Menu">
@@ -80,14 +79,18 @@
         <div class="cart">
           <div class="cart-content">
             <div class="cart-header">
-              <i class="ri-close-line close-cart" title="Close cart" aria-label="Close cart"></i>
+              <i
+                class="ri-close-line close-cart"
+                title="Close cart"
+                aria-label="Close cart"
+              ></i>
               <h3 class="cart-title">Your Cart</h3>
             </div>
-            
+
             <div class="cart-items-container">
               <!-- Cart items will be inserted here -->
             </div>
-            
+
             <div class="cart-footer">
               <div class="total">
                 <h3>2 Items</h3>
@@ -97,13 +100,17 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Payment Methods Modal -->
         <div class="payment-modal">
           <div class="payment-content">
             <div class="payment-header">
               <h3>Pilih Metode Pembayaran</h3>
-              <i class="ri-close-line close-payment" title="Close payment" aria-label="Close payment"></i>
+              <i
+                class="ri-close-line close-payment"
+                title="Close payment"
+                aria-label="Close payment"
+              ></i>
             </div>
             <div class="payment-methods">
               <div class="payment-method" data-method="cod">
@@ -115,7 +122,7 @@
                   <p>Bayar ketika barang diterima</p>
                 </div>
               </div>
-              
+
               <div class="payment-method" data-method="bank">
                 <div class="payment-icon">
                   <i class="ri-bank-line"></i>
@@ -125,7 +132,7 @@
                   <p>BCA, Mandiri, BRI, dll</p>
                 </div>
               </div>
-              
+
               <div class="payment-method" data-method="dana">
                 <div class="payment-icon">
                   <i class="ri-wallet-3-line"></i>
@@ -135,7 +142,7 @@
                   <p>Bayar via aplikasi DANA</p>
                 </div>
               </div>
-              
+
               <div class="payment-method" data-method="ovo">
                 <div class="payment-icon">
                   <i class="ri-smartphone-line"></i>
@@ -148,63 +155,83 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Bank Selection Modal -->
         <div class="bank-modal">
           <div class="bank-content">
             <div class="bank-header">
               <h3>Pilih Bank</h3>
-              <i class="ri-close-line close-bank" title="Close bank selection"></i>
+              <i
+                class="ri-close-line close-bank"
+                title="Close bank selection"
+              ></i>
             </div>
             <div class="bank-options">
               <div class="bank-option" data-bank="bca">
-                <img src="assets/images/bca.jpg" alt="BCA">
+                <img src="assets/images/bca.jpg" alt="BCA" />
                 <span>Bank BCA</span>
               </div>
               <div class="bank-option" data-bank="mandiri">
-                <img src="assets/images/bca.jpg" alt="Mandiri">
+                <img src="assets/images/mandiri.jpg" alt="Mandiri" />
                 <span>Bank Mandiri</span>
               </div>
               <div class="bank-option" data-bank="bri">
-                <img src="assets/images/bca.jpg" alt="BRI">
+                <img src="assets/images/bri.jpg" alt="BRI" />
                 <span>Bank BRI</span>
               </div>
               <div class="bank-option" data-bank="bni">
-                <img src="assets/images/bca.jpg" alt="BNI">
+                <img src="assets/images/bni.jpg" alt="BNI" />
                 <span>Bank BNI</span>
               </div>
             </div>
           </div>
         </div>
-        
+
         <!-- Account Number Input Modal -->
         <div class="account-modal">
           <div class="account-content">
             <div class="account-header">
               <h3 class="account-title">Masukkan Data Pembayaran</h3>
-              <i class="ri-close-line close-account" title="Close account input"></i>
+              <i
+                class="ri-close-line close-account"
+                title="Close account input"
+              ></i>
             </div>
             <div class="account-form">
               <div class="form-group">
                 <label for="account-number">Nomor Rekening/HP</label>
-                <input type="text" id="account-number" placeholder="Masukkan nomor rekening/HP" required>
+                <input
+                  type="text"
+                  id="account-number"
+                  placeholder="Masukkan nomor rekening/HP"
+                  required
+                />
                 <div class="error-message" id="number-error"></div>
               </div>
               <div class="form-group">
                 <label for="account-name">Nama Pemilik Rekening</label>
-                <input type="text" id="account-name" placeholder="Masukkan nama pemilik" required>
+                <input
+                  type="text"
+                  id="account-name"
+                  placeholder="Masukkan nama pemilik"
+                  required
+                />
                 <div class="error-message" id="name-error"></div>
               </div>
               <div class="form-group">
                 <label for="alamat">Masukkan Alamat</label>
-                <input type="text" id="alamat" placeholder="Masukkan Alamat" required>
+                <input
+                  type="text"
+                  id="alamat"
+                  placeholder="Masukkan Alamat"
+                  required
+                />
                 <div class="error-message" id="address-error"></div>
               </div>
               <button class="btn confirm-payment">Konfirmasi Pembayaran</button>
             </div>
           </div>
         </div>
-        
 
         <div class="user-name-container" style="display: none">
           <div class="name-dropdown">
@@ -340,30 +367,30 @@
     <!-- About 1-->
     <section class="about container" id="about" style="margin-top: 1rem">
       <div class="about-text">
-        <h2>Lorem ipsum dolor sit amet.</h2>
+        <h2>Step Up Your Sneaker Game</h2>
         <p>
-          Lorem ipsum dolor sit <strong>amet consectetur </strong> adipisicing
-          elit. Id aliquam vitae nihil nemo, est sapiente odio consequuntur
-          amet, repudiandae eum minima eos. Ipsam natus sed aperiam accusantium
-          voluptatem, minima est!
+          HypeKicks <strong>is your ultimate destination</strong> for premium
+          sneakers, <strong>where style meets comfort. </strong> We bring you
+          the latest trends and exclusive collections that elevate your footwear
+          game.
         </p>
         <div class="features">
           <i class="ri-checkbox-circle-fill"
             ><span
-              ><strong>Redefining Style:</strong> Established to deliver
-              footwear that complements every occasion.</span
+              ><strong>Sneaker Revolution:</strong> Dedicated to bringing you
+              the most hyped and exclusive kicks in the market.</span
             ></i
           >
           <i class="ri-checkbox-circle-fill"
             ><span
-              ><strong>Expert Craftsmanship:</strong> Premium collections
-              designed and crafted by skilled artisans.</span
+              ><strong>Authenticity Guaranteed:</strong> Every pair is 100%
+              authentic and carefully verified by our experts.</span
             ></i
           >
           <i class="ri-checkbox-circle-fill"
             ><span
-              ><strong>Sustainability at Heart:</strong> Commitment to
-              eco-friendly practices in all our designs.</span
+              ><strong>Fast & Secure:</strong> Get your dream sneakers delivered
+              quickly with our premium shipping service.</span
             ></i
           >
         </div>
@@ -380,30 +407,29 @@
         <img src="assets/images/about-2.png" alt="about us" />
       </div>
       <div class="about-text">
-        <h2>Lorem ipsum dolor sit amet.</h2>
+        <h2>Fueling Your Sneaker Obsession</h2>
         <p>
-          Lorem ipsum dolor sit <strong>amet consectetur </strong> adipisicing
-          elit. Id aliquam vitae nihil nemo, est sapiente odio consequuntur
-          amet, repudiandae eum minima eos. Ipsam natus sed aperiam accusantium
-          voluptatem, minima est!
+          At HypeKicks, we <strong>live and breathe sneaker culture </strong>,
+          bringing you the most exclusive drops and limited editions. Our
+          passion fuels our mission to connect sneakerheads with their grails.
         </p>
         <div class="features">
           <i class="ri-checkbox-circle-fill"
             ><span
-              ><strong>Customer-Centric Approach:</strong> Your satisfaction is
-              our priority, guiding everything we do.</span
+              ><strong>Sneakerhead Community:</strong> We speak your language
+              and share your passion for rare kicks.</span
             ></i
           >
           <i class="ri-checkbox-circle-fill"
             ><span
-              ><strong>Sustainability:</strong> We’re committed to offering
-              eco-friendly and ethically crafted footwear.</span
+              ><strong>Verified Authenticity:</strong> Every pair comes with
+              authentication guarantee - no fakes, just real heat.</span
             ></i
           >
           <i class="ri-checkbox-circle-fill"
             ><span
-              ><strong>Quality Assurance:</strong> Discover footwear crafted
-              with precision, durability, and style in mind.</span
+              ><strong>Drop Alerts:</strong> Get instant notifications for
+              upcoming releases and restocks.</span
             ></i
           >
         </div>
@@ -411,7 +437,7 @@
     </section>
     <!-- About end -->
 
- <!-- layanan -->
+    <!-- layanan -->
     <div class="layanan" id="layanan">
       <h1 class="layanan-title">Layanan</h1>
       <div class="container">
@@ -474,20 +500,32 @@
     <div class="testimonial" id="testimonial">
       <h1 class="title">Testimonial</h1>
       <div class="testimonial-container">
-          <div class="testimonial-card">
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis minima dolore fugit dignissimos incidunt vero, provident cumque quae rerum sunt?</p>
-              <p class="author">[Nama Pelanggan], [Lokasi]</p>
-          </div>
-          <div class="testimonial-card">
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium corporis, labore neque quae at cumque necessitatibus dolor maiores. Porro, rerum?</p>
-              <p class="author">[Nama Pelanggan], [Lokasi]</p>
-          </div>
-          <div class="testimonial-card">
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure accusamus explicabo obcaecati odit beatae, sequi error quo nostrum ducimus eius!</p>
-              <p class="author">[Nama Pelanggan], [Lokasi]</p>
-          </div>
+        <div class="testimonial-card">
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis
+            minima dolore fugit dignissimos incidunt vero, provident cumque quae
+            rerum sunt?
+          </p>
+          <p class="author">[Nama Pelanggan], [Lokasi]</p>
+        </div>
+        <div class="testimonial-card">
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium
+            corporis, labore neque quae at cumque necessitatibus dolor maiores.
+            Porro, rerum?
+          </p>
+          <p class="author">[Nama Pelanggan], [Lokasi]</p>
+        </div>
+        <div class="testimonial-card">
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure
+            accusamus explicabo obcaecati odit beatae, sequi error quo nostrum
+            ducimus eius!
+          </p>
+          <p class="author">[Nama Pelanggan], [Lokasi]</p>
+        </div>
       </div>
-  </div>
+    </div>
 
     <!-- newsletter -->
     <section class="newsletter">
@@ -500,69 +538,70 @@
     </section>
     <!-- newsletter end -->
 
- <!-- Footer -->
- <section class="footer container">
-  <div class="footer-box">
-    <h3>Our Company</h3>
-    <a href="about.html" title="Tentang Kami">About Us</a>
-    <a href="about.html#layanan" title="Layanan Kami">Layanan</a>
-    <a href="about.html#testimonial" title="Testimonial">Testimonial</a>
-    <a href="contact.html" title="Contact">contact us</a>
-  </div>
-
-  <div class="footer-box">
-    <h3>Shop</h3>
-    <a href="#popular" title="Produk Terbaru">Product Populer</a>
-    <a href="products.html" title="Produk Terlaris">Best Sellers</a>
-    <a href="products.html" title="Sepatu Sneakers">Nike</a>
-    <a href="products.html" title="Sepatu Olahraga">Puma</a>
-    <a href="products.html" title="Diskon Spesial">Adidas</a>
-    <a href="products.html" title="Diskon Spesial">Aero Street</a>
-  </div>
-
-  <div class="footer-box contact-info">
-    <h3>Contact Us</h3>
-    <div class="contact-item">
-      <i class="ri-map-pin-line"></i>
-      <span>Jl. Awilarangan, Cianjur, Indonesia</span>
+  <!-- Footer -->
+  <section class="footer container">
+    <div class="footer-box">
+      <h3>Our Company</h3>
+      <a href="about.html" title="Tentang Kami">About Us</a>
+      <a href="about.html#layanan" title="Layanan Kami">Layanan</a>
+      <a href="about.html#testimonial" title="Testimonial">Testimonial</a>
+      <a href="contact.html" title="Contact">contact us</a>
     </div>
-    <div class="contact-item">
-      <i class="ri-phone-line"></i>
-      <span>+62 023 4567 890</span>
+  
+    <div class="footer-box">
+      <h3>Shop</h3>
+      <a href="#popular" title="Produk Terbaru">Product Populer</a>
+      <a href="products.html" title="Produk Terlaris">Best Sellers</a>
+      <a href="products.html" title="Sepatu Sneakers">Nike</a>
+      <a href="products.html" title="Sepatu Olahraga">Puma</a>
+      <a href="products.html" title="Diskon Spesial">Adidas</a>
+      <a href="products.html" title="Diskon Spesial">Aero Street</a>
     </div>
-    <div class="contact-item">
-      <i class="ri-mail-line"></i>
-      <span>HypeKicks@email.com</span>
+  
+    <div class="footer-box contact-info">
+      <h3>Contact Us</h3>
+      <div class="contact-item">
+        <i class="ri-map-pin-line"></i>
+        <span>Jl. Awilarangan, Cianjur, Indonesia</span>
+      </div>
+      <div class="contact-item">
+        <i class="ri-phone-line"></i>
+        <span>+62 023 4567 890</span>
+      </div>
+      <div class="contact-item">
+        <i class="ri-mail-line"></i>
+        <span>HypeKicks@email.com</span>
+      </div>
+      
+      <div> </div>
+      <div class="social">
+        <a href="#" target="_blank" title="Facebook">
+          <i class="ri-facebook-circle-fill"></i>
+        </a>
+        <a href="#" target="_blank" title="Twitter">
+          <i class="ri-twitter-x-line"></i>
+        </a>
+        <a href="#" target="_blank" title="Instagram">
+          <i class="ri-instagram-fill"></i>
+        </a>
+        <a href="#" target="_blank" title="WhatsApp">
+          <i class="ri-whatsapp-line"></i>
+        </a>
+      </div>
     </div>
-    
-    <div> </div>
-    <div class="social">
-      <a href="#" target="_blank" title="Facebook">
-        <i class="ri-facebook-circle-fill"></i>
-      </a>
-      <a href="#" target="_blank" title="Twitter">
-        <i class="ri-twitter-x-line"></i>
-      </a>
-      <a href="#" target="_blank" title="Instagram">
-        <i class="ri-instagram-fill"></i>
-      </a>
-      <a href="#" target="_blank" title="WhatsApp">
-        <i class="ri-whatsapp-line"></i>
-      </a>
+    <div class="footer-box">
+      <h3>Payment Methods</h3>
+      <div class="payment-icons">
+        <img src="assets/images/bca.jpg" alt="BCA" title="BCA">
+        <img src="assets/images/bri.jpg" alt="BRI" title="BRI">
+        <img src="assets/images/bni.jpg" alt="BNI" title="BNI">
+        <img src="assets/images/mandiri.jpg" alt="MANDIRI" title="MANDIRI">
+        <img src="assets/images/ovo.jpg" alt="OVO" title="OVO">
+        <img src="assets/images/dana.jpg" alt="DANA" title="DANA">
+      </div>
     </div>
-  </div>
-  <div class="footer-box">
-    <h3>Payment Methods</h3>
-    <div class="payment-icons">
-      <img src="assets/images/bca.jpg" alt="Visa" title="Visa">
-      <img src="assets/images/bca.jpg" alt="Mastercard" title="Mastercard">
-      <img src="assets/images/bca.jpg" alt="PayPal" title="PayPal">
-      <img src="assets/images/bca.jpg" alt="OVO" title="OVO">
-      <img src="assets/images/bca.jpg" alt="DANA" title="DANA">
-    </div>
-  </div>
-</section>
-<!-- Footer end-->
+  </section>
+  <!-- Footer end-->
 
     <!-- copyright -->
     <div class="copyright">

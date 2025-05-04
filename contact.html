@@ -15,7 +15,10 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
 
     <!-- fav icons -->
     <link
@@ -25,16 +28,15 @@
     />
   </head>
   <style>
-    .search-container{
-        display: none;
+    .search-container {
+      display: none;
     }
     .ri-shopping-cart-line {
-        display: none;
+      display: none;
     }
   </style>
 
   <body>
-
     <!-- header -->
     <header>
       <div class="nav container">
@@ -85,14 +87,18 @@
         <div class="cart">
           <div class="cart-content">
             <div class="cart-header">
-              <i class="ri-close-line close-cart" title="Close cart" aria-label="Close cart"></i>
+              <i
+                class="ri-close-line close-cart"
+                title="Close cart"
+                aria-label="Close cart"
+              ></i>
               <h3 class="cart-title">Your Cart</h3>
             </div>
-            
+
             <div class="cart-items-container">
               <!-- Cart items will be inserted here -->
             </div>
-            
+
             <div class="cart-footer">
               <div class="total">
                 <h3>2 Items</h3>
@@ -102,13 +108,17 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Payment Methods Modal -->
         <div class="payment-modal">
           <div class="payment-content">
             <div class="payment-header">
               <h3>Pilih Metode Pembayaran</h3>
-              <i class="ri-close-line close-payment" title="Close payment" aria-label="Close payment"></i>
+              <i
+                class="ri-close-line close-payment"
+                title="Close payment"
+                aria-label="Close payment"
+              ></i>
             </div>
             <div class="payment-methods">
               <div class="payment-method" data-method="cod">
@@ -120,7 +130,7 @@
                   <p>Bayar ketika barang diterima</p>
                 </div>
               </div>
-              
+
               <div class="payment-method" data-method="bank">
                 <div class="payment-icon">
                   <i class="ri-bank-line"></i>
@@ -130,7 +140,7 @@
                   <p>BCA, Mandiri, BRI, dll</p>
                 </div>
               </div>
-              
+
               <div class="payment-method" data-method="dana">
                 <div class="payment-icon">
                   <i class="ri-wallet-3-line"></i>
@@ -140,7 +150,7 @@
                   <p>Bayar via aplikasi DANA</p>
                 </div>
               </div>
-              
+
               <div class="payment-method" data-method="ovo">
                 <div class="payment-icon">
                   <i class="ri-smartphone-line"></i>
@@ -153,63 +163,83 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Bank Selection Modal -->
         <div class="bank-modal">
           <div class="bank-content">
             <div class="bank-header">
               <h3>Pilih Bank</h3>
-              <i class="ri-close-line close-bank" title="Close bank selection"></i>
+              <i
+                class="ri-close-line close-bank"
+                title="Close bank selection"
+              ></i>
             </div>
             <div class="bank-options">
               <div class="bank-option" data-bank="bca">
-                <img src="assets/images/bca.jpg" alt="BCA">
+                <img src="assets/images/bca.jpg" alt="BCA" />
                 <span>Bank BCA</span>
               </div>
               <div class="bank-option" data-bank="mandiri">
-                <img src="assets/images/bca.jpg" alt="Mandiri">
+                <img src="assets/images/bca.jpg" alt="Mandiri" />
                 <span>Bank Mandiri</span>
               </div>
               <div class="bank-option" data-bank="bri">
-                <img src="assets/images/bca.jpg" alt="BRI">
+                <img src="assets/images/bca.jpg" alt="BRI" />
                 <span>Bank BRI</span>
               </div>
               <div class="bank-option" data-bank="bni">
-                <img src="assets/images/bca.jpg" alt="BNI">
+                <img src="assets/images/bca.jpg" alt="BNI" />
                 <span>Bank BNI</span>
               </div>
             </div>
           </div>
         </div>
-        
+
         <!-- Account Number Input Modal -->
         <div class="account-modal">
           <div class="account-content">
             <div class="account-header">
               <h3 class="account-title">Masukkan Data Pembayaran</h3>
-              <i class="ri-close-line close-account" title="Close account input"></i>
+              <i
+                class="ri-close-line close-account"
+                title="Close account input"
+              ></i>
             </div>
             <div class="account-form">
               <div class="form-group">
                 <label for="account-number">Nomor Rekening/HP</label>
-                <input type="text" id="account-number" placeholder="Masukkan nomor rekening/HP" required>
+                <input
+                  type="text"
+                  id="account-number"
+                  placeholder="Masukkan nomor rekening/HP"
+                  required
+                />
                 <div class="error-message" id="number-error"></div>
               </div>
               <div class="form-group">
                 <label for="account-name">Nama Pemilik Rekening</label>
-                <input type="text" id="account-name" placeholder="Masukkan nama pemilik" required>
+                <input
+                  type="text"
+                  id="account-name"
+                  placeholder="Masukkan nama pemilik"
+                  required
+                />
                 <div class="error-message" id="name-error"></div>
               </div>
               <div class="form-group">
                 <label for="alamat">Masukkan Alamat</label>
-                <input type="text" id="alamat" placeholder="Masukkan Alamat" required>
+                <input
+                  type="text"
+                  id="alamat"
+                  placeholder="Masukkan Alamat"
+                  required
+                />
                 <div class="error-message" id="address-error"></div>
               </div>
               <button class="btn confirm-payment">Konfirmasi Pembayaran</button>
             </div>
           </div>
         </div>
-        
 
         <div class="user-name-container" style="display: none">
           <div class="name-dropdown">
@@ -341,12 +371,11 @@
       </div>
     </header>
     <!-- header end -->
-  
 
     <!-- contact  -->
     <section class="form-section container">
       <form action="#" method="POST" class="contact-form" id="contact-form">
-        <h2>Lorem ipsum dolor sit amet.</h2>
+        <h2>Contact Us For Everything about shoe</h2>
         <input
           type="text"
           name="user_name"

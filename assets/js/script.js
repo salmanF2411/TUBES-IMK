@@ -6,20 +6,16 @@ const loginForm = document.querySelector(".login-form");
 const cartIcon = document.querySelector("#cart-icon");
 const userIcon = document.querySelector("#user-icon");
 
-
 const userNameContainer = document.querySelector(".user-name-container");
 const navbarUsername = document.getElementById("navbarUsername");
 const logoutBtn = document.getElementById("logoutBtn");
-
 
 const loginFormElement = document.getElementById("loginForm");
 const forgotPasswordForm = document.getElementById("forgotPasswordForm");
 const createAccountForm = document.getElementById("createAccountForm");
 const resetPasswordForm = document.getElementById("resetPasswordForm");
 
-
 let currentUser = JSON.parse(localStorage.getItem("currentUser")) || null;
-
 
 const originalPrices = new WeakMap();
 
@@ -30,7 +26,7 @@ function checkLogin() {
 
 // Function to show login required message
 function showLoginRequired() {
-  showNotification("Silakan login terlebih dahulu untuk mengakses keranjang");
+  showNotification("Silakan login terlebih dahulu untuk mengakses keranjang", true);
   loginForm.classList.add("active");
   cart.classList.remove("active");
 }
@@ -42,6 +38,26 @@ function toggleCartIconVisibility() {
   } else {
     cartIcon.style.display = "block";
   }
+}
+
+// Notification function
+function showNotification(message, isError = false) {
+  // Remove old notification if exists
+  const oldNotification = document.querySelector('.notification');
+  if (oldNotification) {
+    oldNotification.remove();
+  }
+
+  const notification = document.createElement("div");
+  notification.className = `notification ${isError ? 'error' : ''}`;
+  notification.textContent = message;
+
+  document.body.appendChild(notification);
+
+  setTimeout(() => {
+    notification.style.animation = "slideOut 0.5s ease-out";
+    setTimeout(() => notification.remove(), 500);
+  }, 5000);
 }
 
 // Toggle functions
@@ -122,21 +138,28 @@ function applyDiscounts() {
     if (!isNaN(originalPrice)) {
       originalPrices.set(element, originalPrice);
       const discountedPrice = originalPrice * (1 - discount);
-      
-      element.textContent = `Rp ${Math.round(discountedPrice).toLocaleString("id-ID")}`;
+
+      element.textContent = `Rp ${Math.round(discountedPrice).toLocaleString(
+        "id-ID"
+      )}`;
       element.style.color = "#4CAF50";
       element.style.fontWeight = "bold";
       element.dataset.discounted = "true";
 
       const originalPriceDisplay = document.createElement("span");
       originalPriceDisplay.className = "original-price";
-      originalPriceDisplay.textContent = ` Rp ${originalPrice.toLocaleString("id-ID")}`;
+      originalPriceDisplay.textContent = ` Rp ${originalPrice.toLocaleString(
+        "id-ID"
+      )}`;
       originalPriceDisplay.style.textDecoration = "line-through";
       originalPriceDisplay.style.color = "#777";
       originalPriceDisplay.style.fontSize = "0.8em";
       originalPriceDisplay.style.marginLeft = "5px";
-      
-      element.parentNode.insertBefore(originalPriceDisplay, element.nextSibling);
+
+      element.parentNode.insertBefore(
+        originalPriceDisplay,
+        element.nextSibling
+      );
     }
   });
 }
@@ -177,47 +200,6 @@ function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-// Notification function
-function showNotification(message) {
-  const notification = document.createElement("div");
-  notification.className = "notification";
-  notification.textContent = message;
-
-  notification.style.position = "fixed";
-  notification.style.bottom = "20px";
-  notification.style.right = "20px";
-  notification.style.backgroundColor = "#4CAF50";
-  notification.style.color = "white";
-  notification.style.padding = "15px 20px";
-  notification.style.borderRadius = "5px";
-  notification.style.zIndex = "1000";
-  notification.style.boxShadow = "0 4px 8px rgba(0,0,0,0.1)";
-  notification.style.animation = "slideIn 0.5s ease-out";
-
-  document.body.appendChild(notification);
-
-  setTimeout(() => {
-    notification.style.animation = "slideOut 0.5s ease-out";
-    setTimeout(() => notification.remove(), 500);
-  }, 5000);
-
-  if (!document.getElementById("notification-animation")) {
-    const style = document.createElement("style");
-    style.id = "notification-animation";
-    style.textContent = `
-      @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-      }
-      @keyframes slideOut {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(100%); opacity: 0; }
-      }
-    `;
-    document.head.appendChild(style);
-  }
-}
-
 // Redirect to home function
 function redirectToHome() {
   window.location.href = "index.html";
@@ -236,7 +218,7 @@ loginFormElement?.addEventListener("submit", function (e) {
   const password = this.querySelector('input[name="password"]').value;
 
   if (!isValidEmail(email)) {
-    alert("Format email tidak valid");
+    showNotification("Format email tidak valid", true);
     return;
   }
 
@@ -249,11 +231,11 @@ loginFormElement?.addEventListener("submit", function (e) {
     updateNavbarUsername();
     loginForm.classList.remove("active");
     this.reset();
-    
+
     applyDiscounts();
     showNotification("Login berhasil! Anda mendapatkan diskon 20%");
   } else {
-    alert("Email atau password salah");
+    showNotification("Email atau password salah", true);
   }
 });
 
@@ -263,31 +245,33 @@ createAccountForm?.addEventListener("submit", function (e) {
   const name = this.querySelector('input[name="name"]').value;
   const email = this.querySelector('input[name="email"]').value;
   const password = this.querySelector('input[name="password"]').value;
-  const confirmPassword = this.querySelector('input[name="confirm-password"]').value;
+  const confirmPassword = this.querySelector(
+    'input[name="confirm-password"]'
+  ).value;
 
   if (!isValidUsername(name)) {
-    alert("Username harus 3-30 karakter dan bisa mengandung huruf, angka, dan spasi");
+    showNotification("Username harus 3-30 karakter dan bisa mengandung huruf, angka, dan spasi", true);
     return;
   }
 
   if (!isValidEmail(email)) {
-    alert("Format email tidak valid");
+    showNotification("Format email tidak valid", true);
     return;
   }
 
   if (!isValidPassword(password)) {
-    alert("Password harus 6-30 karakter");
+    showNotification("Password harus 6-30 karakter", true);
     return;
   }
 
   if (password !== confirmPassword) {
-    alert("Password tidak cocok");
+    showNotification("Password tidak cocok", true);
     return;
   }
 
   const users = JSON.parse(localStorage.getItem("users")) || [];
   if (users.some((u) => u.email === email)) {
-    alert("Email sudah digunakan");
+    showNotification("Email sudah digunakan", true);
     return;
   }
 
@@ -302,7 +286,7 @@ createAccountForm?.addEventListener("submit", function (e) {
 
   applyDiscounts();
   showNotification("Akun berhasil dibuat! Anda mendapatkan diskon 20%");
-  
+
   redirectToHome();
 });
 
@@ -312,7 +296,7 @@ forgotPasswordForm?.addEventListener("submit", function (e) {
   const email = this.querySelector('input[name="email"]').value;
 
   if (!isValidEmail(email)) {
-    alert("Format email tidak valid");
+    showNotification("Format email tidak valid", true);
     return;
   }
 
@@ -323,8 +307,9 @@ forgotPasswordForm?.addEventListener("submit", function (e) {
     forgotPasswordForm.classList.remove("active");
     resetPasswordForm.classList.add("active");
     resetPasswordForm.setAttribute("data-email", email);
+    showNotification("Silakan buat password baru");
   } else {
-    alert("Email tidak ditemukan");
+    showNotification("Email tidak ditemukan", true);
   }
 });
 
@@ -333,15 +318,17 @@ resetPasswordForm?.addEventListener("submit", function (e) {
   e.preventDefault();
   const email = this.getAttribute("data-email");
   const newPassword = this.querySelector('input[name="new-password"]').value;
-  const confirmPassword = this.querySelector('input[name="confirm-new-password"]').value;
+  const confirmPassword = this.querySelector(
+    'input[name="confirm-new-password"]'
+  ).value;
 
   if (!isValidPassword(newPassword)) {
-    alert("Password harus 6-30 karakter");
+    showNotification("Password harus 6-30 karakter", true);
     return;
   }
 
   if (newPassword !== confirmPassword) {
-    alert("Password tidak cocok");
+    showNotification("Password tidak cocok", true);
     return;
   }
 
@@ -357,12 +344,12 @@ resetPasswordForm?.addEventListener("submit", function (e) {
       localStorage.setItem("currentUser", JSON.stringify(currentUser));
     }
 
-    alert("Password berhasil diubah! Silakan login dengan password baru");
+    showNotification("Password berhasil diubah! Silakan login dengan password baru");
     this.reset();
     resetPasswordForm.classList.remove("active");
     loginFormElement.classList.add("active");
   } else {
-    alert("Terjadi kesalahan, silakan coba lagi");
+    showNotification("Terjadi kesalahan, silakan coba lagi", true);
   }
 });
 
@@ -382,8 +369,9 @@ logoutBtn?.addEventListener("click", function (e) {
   createAccountForm.classList.remove("active");
   resetPasswordForm.classList.remove("active");
   loginFormElement.reset();
-  
+
   removeDiscounts();
+  showNotification("Anda telah logout");
 });
 
 // Close dropdown when clicking outside
@@ -448,10 +436,13 @@ window.addEventListener("scroll", () => {
   }
 });
 
-// Agar tombol berfungsi saat diklik
 scrollTopBtn.addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo(0, 0); // Scroll langsung ke atas tanpa animasi
 });
+
+// scrollTopBtn.addEventListener("click", () => {
+//   window.scrollTo({ top: 0, behavior: "smooth" });
+// });
 
 // ====== Scroll Top Button Functionality End ======
 
@@ -552,10 +543,12 @@ searchInput.addEventListener("keypress", (e) => {
 });
 
 // Keranjang
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   const isLoggedIn = checkLogin();
   const userCartKey = isLoggedIn ? `cart_${currentUser?.email}` : "guest_cart";
-  let cart = isLoggedIn ? JSON.parse(localStorage.getItem(userCartKey)) || [] : [];
+  let cart = isLoggedIn
+    ? JSON.parse(localStorage.getItem(userCartKey)) || []
+    : [];
 
   // DOM Elements
   const cartElement = document.querySelector(".cart");
@@ -596,10 +589,12 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   function showCartToggle() {
-    if (cartToggle &&
+    if (
+      cartToggle &&
       !paymentModal.classList.contains("active") &&
       !bankModal.classList.contains("active") &&
-      !accountModal.classList.contains("active")) {
+      !accountModal.classList.contains("active")
+    ) {
       cartToggle.style.display = "block";
       cartToggle.classList.remove("hidden-during-payment");
     }
@@ -607,7 +602,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Close cart
   if (closeCartBtn) {
-    closeCartBtn.addEventListener("click", function() {
+    closeCartBtn.addEventListener("click", function () {
       cartElement.classList.remove("active");
       showCartToggle();
     });
@@ -615,7 +610,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Toggle cart
   if (cartToggle) {
-    cartToggle.addEventListener("click", function(e) {
+    cartToggle.addEventListener("click", function (e) {
       e.preventDefault();
       if (!checkLogin()) {
         showLoginRequired();
@@ -626,11 +621,43 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   // Close cart when clicking outside
-  cartElement.addEventListener("click", function(e) {
+  cartElement.addEventListener("click", function (e) {
     if (e.target === cartElement) {
       toggleCart();
     }
   });
+
+  // Fungsi untuk membuat item keranjang bisa diklik
+  function makeCartItemsClickable() {
+    document
+      .querySelectorAll(".cart-box img, .cart-box .cart-text h3")
+      .forEach((element) => {
+        element.style.cursor = "pointer";
+        element.addEventListener("click", function (e) {
+          e.stopPropagation();
+          const cartBox = this.closest(".cart-box");
+          const index = parseInt(
+            cartBox.querySelector(".remove-item").getAttribute("data-index")
+          );
+          const productName = cart[index].name;
+
+          // Simulasikan navigasi ke halaman detail produk
+          navigateToProductDetail(productName);
+        });
+      });
+  }
+
+  // Fungsi untuk navigasi ke halaman detail produk
+  function navigateToProductDetail(productName) {
+    // Ganti dengan logika navigasi sesuai kebutuhan aplikasi Anda
+    console.log(`Navigasi ke detail produk: ${productName}`);
+    Contoh: window.location.href = `ProductDetail.html?name=${encodeURIComponent(
+      productName
+    )}`;
+
+    // Untuk contoh, kita tampilkan notifikasi
+    showNotification(`Membuka detail produk: ${productName}`);
+  }
 
   // Update cart display
   function updateCartDisplay() {
@@ -662,17 +689,30 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
             <select class="size-selector" data-index="${index}">
               <option value="">Pilih Ukuran</option>
-              <option value="38" ${item.size === '38' ? 'selected' : ''}>38</option>
-              <option value="39" ${item.size === '39' ? 'selected' : ''}>39</option>
-              <option value="40" ${item.size === '40' ? 'selected' : ''}>40</option>
-              <option value="41" ${item.size === '41' ? 'selected' : ''}>41</option>
-              <option value="42" ${item.size === '42' ? 'selected' : ''}>42</option>
+              <option value="38" ${
+                item.size === "38" ? "selected" : ""
+              }>38</option>
+              <option value="39" ${
+                item.size === "39" ? "selected" : ""
+              }>39</option>
+              <option value="40" ${
+                item.size === "40" ? "selected" : ""
+              }>40</option>
+              <option value="41" ${
+                item.size === "41" ? "selected" : ""
+              }>41</option>
+              <option value="42" ${
+                item.size === "42" ? "selected" : ""
+              }>42</option>
             </select>
           </div>
           <i class="ri-delete-bin-line remove-item" data-index="${index}"></i>
         `;
         cartItemsContainer.appendChild(cartBox);
       });
+
+      // Panggil fungsi untuk membuat item bisa diklik
+      makeCartItemsClickable();
 
       // Update total
       const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -681,26 +721,30 @@ document.addEventListener("DOMContentLoaded", function() {
         return sum + price * item.quantity;
       }, 0);
 
-      document.querySelector(".total h3").textContent = `${totalItems} Item${totalItems !== 1 ? 's' : ''}`;
-      document.querySelector(".total span").textContent = `Total Rp. ${totalPrice.toLocaleString('id-ID')}`;
+      document.querySelector(".total h3").textContent = `${totalItems} Item${
+        totalItems !== 1 ? "s" : ""
+      }`;
+      document.querySelector(
+        ".total span"
+      ).textContent = `Total Rp. ${totalPrice.toLocaleString("id-ID")}`;
 
       // Add event listeners for dynamic elements
-      document.querySelectorAll(".remove-item").forEach(btn => {
-        btn.addEventListener("click", function() {
+      document.querySelectorAll(".remove-item").forEach((btn) => {
+        btn.addEventListener("click", function () {
           removeFromCart(parseInt(this.getAttribute("data-index")));
         });
       });
 
-      document.querySelectorAll(".quantity-btn").forEach(btn => {
-        btn.addEventListener("click", function() {
+      document.querySelectorAll(".quantity-btn").forEach((btn) => {
+        btn.addEventListener("click", function () {
           const index = parseInt(this.getAttribute("data-index"));
           const isPlus = this.classList.contains("plus");
           updateQuantity(index, isPlus);
         });
       });
 
-      document.querySelectorAll(".size-selector").forEach(select => {
-        select.addEventListener("change", function() {
+      document.querySelectorAll(".size-selector").forEach((select) => {
+        select.addEventListener("change", function () {
           const index = parseInt(this.getAttribute("data-index"));
           const newSize = this.value;
           updateSize(index, newSize);
@@ -712,7 +756,9 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   function saveCartToStorage() {
-    const userCartKey = checkLogin() ? `cart_${currentUser.email}` : "guest_cart";
+    const userCartKey = checkLogin()
+      ? `cart_${currentUser.email}`
+      : "guest_cart";
     localStorage.setItem(userCartKey, JSON.stringify(cart));
   }
 
@@ -722,11 +768,12 @@ document.addEventListener("DOMContentLoaded", function() {
       showLoginRequired();
       return;
     }
-    
-    const existingIndex = cart.findIndex(item => 
-      item.name === product.name && item.size === (product.size || null)
+
+    const existingIndex = cart.findIndex(
+      (item) =>
+        item.name === product.name && item.size === (product.size || null)
     );
-    
+
     if (existingIndex !== -1) {
       cart[existingIndex].quantity += product.quantity || 1;
     } else {
@@ -735,7 +782,7 @@ document.addEventListener("DOMContentLoaded", function() {
         price: product.price,
         image: product.image,
         quantity: product.quantity || 1,
-        size: product.size || null
+        size: product.size || null,
       });
     }
     updateCartDisplay();
@@ -771,7 +818,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // Notification system
   function showNotification(message, isError = false) {
     const notification = document.createElement("div");
-    notification.className = `notification ${isError ? 'error' : ''}`;
+    notification.className = `notification ${isError ? "error" : ""}`;
     notification.innerHTML = `<span>${message}</span>`;
     document.body.appendChild(notification);
 
@@ -817,27 +864,33 @@ document.addEventListener("DOMContentLoaded", function() {
       showLoginRequired();
       return;
     }
-    
+
     if (cart.length === 0) {
       e.preventDefault();
-      showNotification("Keranjang belanja kosong! Silakan tambahkan produk terlebih dahulu.", true);
+      showNotification(
+        "Keranjang belanja kosong! Silakan tambahkan produk terlebih dahulu.",
+        true
+      );
       return;
     }
     showPaymentMethods(e);
   }
 
   // Buy Now functionality
-  document.querySelector(".buy-now")?.addEventListener("click", function() {
+  document.querySelector(".buy-now")?.addEventListener("click", function () {
     if (!checkLogin()) {
       showLoginRequired();
       return;
     }
-    
+
     const productName = document.querySelector(".product-name").textContent;
     const productPrice = document.querySelector(".current-price").textContent;
     const productImage = document.querySelector(".product-main-image").src;
-    const selectedSize = document.querySelector(".size-option input:checked")?.value;
-    const quantity = parseInt(document.querySelector(".quantity-input").value) || 1;
+    const selectedSize = document.querySelector(
+      ".size-option input:checked"
+    )?.value;
+    const quantity =
+      parseInt(document.querySelector(".quantity-input").value) || 1;
 
     if (!selectedSize) {
       const sizeError = document.querySelector(".size-error-message");
@@ -853,22 +906,22 @@ document.addEventListener("DOMContentLoaded", function() {
       price: productPrice,
       image: productImage,
       size: selectedSize,
-      quantity: quantity
+      quantity: quantity,
     });
 
-    showPaymentMethods(new Event('click'));
-    
+    showPaymentMethods(new Event("click"));
+
     if (!cartElement.classList.contains("active")) {
       toggleCart(true);
     }
   });
 
   // Payment method selection
-  paymentMethods.forEach(method => {
-    method.addEventListener("click", function() {
+  paymentMethods.forEach((method) => {
+    method.addEventListener("click", function () {
       const paymentMethod = this.getAttribute("data-method");
-      
-      paymentMethods.forEach(m => m.classList.remove("active"));
+
+      paymentMethods.forEach((m) => m.classList.remove("active"));
       this.classList.add("active");
 
       if (paymentMethod === "bank") {
@@ -882,8 +935,8 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   // Bank selection
-  bankOptions.forEach(bank => {
-    bank.addEventListener("click", function() {
+  bankOptions.forEach((bank) => {
+    bank.addEventListener("click", function () {
       bankModal.classList.remove("active");
       accountModal.classList.add("active");
     });
@@ -895,14 +948,14 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   if (closeBankBtn) {
-    closeBankBtn.addEventListener("click", function() {
+    closeBankBtn.addEventListener("click", function () {
       bankModal.classList.remove("active");
       paymentModal.classList.add("active");
     });
   }
 
   if (closeAccountBtn) {
-    closeAccountBtn.addEventListener("click", function() {
+    closeAccountBtn.addEventListener("click", function () {
       accountModal.classList.remove("active");
       paymentModal.classList.add("active");
     });
@@ -910,90 +963,352 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Confirm payment
   if (confirmBtn) {
-    confirmBtn.addEventListener("click", function(e) {
+    confirmBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      
+  
       let isValid = true;
       const number = document.querySelector("#account-number").value.trim();
       const name = document.querySelector("#account-name").value.trim();
       const address = document.querySelector("#alamat").value.trim();
-
-      document.querySelectorAll(".error-message").forEach(el => {
+  
+      document.querySelectorAll(".error-message").forEach((el) => {
         el.style.display = "none";
       });
-
+  
       if (!number) {
-        document.getElementById("number-error").textContent = "Nomor rekening/HP harus diisi";
+        document.getElementById("number-error").textContent =
+          "Nomor rekening/HP harus diisi";
         document.getElementById("number-error").style.display = "block";
         isValid = false;
       }
-
+  
       if (!name) {
-        document.getElementById("name-error").textContent = "Nama pemilik harus diisi";
+        document.getElementById("name-error").textContent =
+          "Nama pemilik harus diisi";
         document.getElementById("name-error").style.display = "block";
         isValid = false;
       }
-
+  
       if (!address) {
-        document.getElementById("address-error").textContent = "Alamat harus diisi";
+        document.getElementById("address-error").textContent =
+          "Alamat harus diisi";
         document.getElementById("address-error").style.display = "block";
         isValid = false;
       }
-
+  
       if (isValid) {
+        // Mendapatkan metode pembayaran yang dipilih
         const activeMethod = document.querySelector(".payment-method.active");
-        const method = activeMethod ? activeMethod.getAttribute("data-method") : "bank";
-        
-        const total = cart.reduce((sum, item) => {
-          const price = parseInt(item.price.replace(/\D/g, ""));
-          return sum + price * item.quantity;
-        }, 0);
+        const paymentMethod = activeMethod
+          ? activeMethod.getAttribute("data-method")
+          : "Metode Tidak Dipilih";
 
-        showNotification(`Pembayaran dengan ${method} berhasil! Total: Rp ${total.toLocaleString('id-ID')}`);
+        // Create custom confirmation modal
+        const confirmationModal = document.createElement('div');
+        confirmationModal.className = 'custom-confirmation-modal';
+        confirmationModal.innerHTML = `
+          <div class="confirmation-dialog">
+            <div class="confirmation-header">
+              <i class="ri-question-line"></i>
+              <h3>Konfirmasi Pembayaran</h3>
+            </div>
+            <div class="confirmation-body">
+              <p>Apakah Anda yakin ingin melakukan pembayaran ini?</p>
+              <div class="order-summary">
+                <h4>Ringkasan Pesanan</h4>
+                <ul>
+                  ${cart.map(item => `
+                    <li>
+                      <span>${item.name} (${item.size || '-'})</span>
+                      <span>${item.quantity}x ${item.price}</span>
+                    </li>
+                  `).join('')}
+                </ul>
+                <div class="total-summary">
+                  <span>Total Pembayaran:</span>
+                  <span class="total-price">Rp ${cart.reduce((sum, item) => {
+                    const price = parseInt(item.price.replace(/\D/g, ""));
+                    return sum + price * item.quantity;
+                  }, 0).toLocaleString("id-ID")}</span>
+                </div>
+                <!-- Menampilkan metode pembayaran -->
+                <div class="payment-method-summary">
+                  <span>Metode Pembayaran:</span>
+                  <span>${paymentMethod}</span>
+                </div>
+              </div>
+            </div>
+            <div class="confirmation-footer">
+              <button class="cancel-btn">Batal</button>
+              <button class="confirm-btn">Ya, Lanjutkan Pembayaran</button>
+            </div>
+          </div>
+        `;
         
-        cart = [];
-        updateCartDisplay();
-        
-        accountModal.classList.remove("active");
-        paymentModal.classList.remove("active");
-        document.body.style.overflow = "";
+        document.body.appendChild(confirmationModal);
+        document.body.style.overflow = 'hidden';
+  
+        // Add styles dynamically
+        const style = document.createElement('style');
+        style.textContent = `
+          .custom-confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+          }
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+          .confirmation-dialog {
+            background: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transform: translateY(0);
+            animation: slideUp 0.3s ease;
+          }
+          @keyframes slideUp {
+            from { transform: translateY(20px); }
+            to { transform: translateY(0); }
+          }
+          .confirmation-header {
+            padding: 20px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #eee;
+          }
+          .confirmation-header i {
+            font-size: 24px;
+            color: #ff6b6b;
+          }
+          .confirmation-header h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+          }
+          .confirmation-body {
+            padding: 20px;
+          }
+          .confirmation-body p {
+            margin: 0 0 15px;
+            color: #555;
+          }
+          .order-summary {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+          }
+          .order-summary h4 {
+            margin: 0 0 10px;
+            font-size: 16px;
+            color: #333;
+          }
+          .order-summary ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 15px;
+          }
+          .order-summary li {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            font-size: 14px;
+          }
+          .total-summary {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            font-weight: bold;
+          }
+          .total-price {
+            color: #ff6b6b;
+          }
+          .payment-method-summary {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            font-weight: bold;
+          }
+          .confirmation-footer {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #eee;
+            gap: 10px;
+          }
+          .confirmation-footer button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+          }
+          .cancel-btn {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            color: #555;
+          }
+          .cancel-btn:hover {
+            background: #e9ecef;
+          }
+          .confirm-btn {
+            background: #ff6b6b;
+            border: none;
+            color: white;
+          }
+          .confirm-btn:hover {
+            background: #e53935;
+          }
+        `;
+        document.head.appendChild(style);
+  
+        // Handle button clicks
+        confirmationModal.querySelector('.cancel-btn').addEventListener('click', () => {
+          confirmationModal.remove();
+          style.remove();
+          document.body.style.overflow = '';
+        });
+  
+        confirmationModal.querySelector('.confirm-btn').addEventListener('click', () => {
+          confirmationModal.remove();
+          style.remove();
+          document.body.style.overflow = '';
+  
+          const total = cart.reduce((sum, item) => {
+            const price = parseInt(item.price.replace(/\D/g, ""));
+            return sum + price * item.quantity;
+          }, 0);
+  
+          // Show success notification with animation
+          const successNotification = document.createElement('div');
+          successNotification.className = 'payment-success-notification';
+          successNotification.innerHTML = `
+            <div class="success-content">
+              <i class="ri-checkbox-circle-fill"></i>
+              <div>
+                <h4>Pembayaran Berhasil!</h4>
+                <p>Total: Rp ${total.toLocaleString("id-ID")}</p>
+              </div>
+            </div>
+          `;
+          document.body.appendChild(successNotification);
+  
+          // Add success styles
+          const successStyle = document.createElement('style');
+          successStyle.textContent = `
+            .payment-success-notification {
+              position: fixed;
+              bottom: 20px;
+              right: 20px;
+              background: #4CAF50;
+              color: white;
+              padding: 15px 20px;
+              border-radius: 8px;
+              box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+              z-index: 9999;
+              animation: slideInRight 0.3s ease, fadeOut 2s ease 3s forwards;
+              display: flex;
+              align-items: center;
+            }
+            @keyframes slideInRight {
+              from { transform: translateX(100%); opacity: 0; }
+              to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes fadeOut {
+              to { opacity: 0; }
+            }
+            .payment-success-notification .success-content {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+            }
+            .payment-success-notification i {
+              font-size: 24px;
+            }
+            .payment-success-notification h4 {
+              margin: 0 0 5px;
+              font-size: 16px;
+            }
+            .payment-success-notification p {
+              margin: 0;
+              font-size: 14px;
+              opacity: 0.9;
+            }
+          `;
+          document.head.appendChild(successStyle);
+  
+          // Clear cart after successful payment
+          cart = [];
+          updateCartDisplay();
+  
+          // Close modals
+          accountModal.classList.remove("active");
+          paymentModal.classList.remove("active");
+  
+          // Remove elements after animation
+          setTimeout(() => {
+            successNotification.remove();
+            successStyle.remove();
+          }, 5000);
+        });
       }
     });
   }
 
   // Add to cart button
-  document.querySelector(".add-to-cart")?.addEventListener("click", function() {
-    if (!checkLogin()) {
-      showLoginRequired();
-      return;
-    }
-    
-    const productName = document.querySelector(".product-name").textContent;
-    const productPrice = document.querySelector(".current-price").textContent;
-    const productImage = document.querySelector(".product-main-image").src;
-    const selectedSize = document.querySelector(".size-option input:checked")?.value;
-    const quantity = parseInt(document.querySelector(".quantity-input").value) || 1;
+  document
+    .querySelector(".add-to-cart")
+    ?.addEventListener("click", function () {
+      if (!checkLogin()) {
+        showLoginRequired();
+        return;
+      }
 
-    if (!selectedSize) {
-      const sizeError = document.querySelector(".size-error-message");
-      sizeError.textContent = "Silakan pilih ukuran";
-      sizeError.style.display = "block";
-      showNotification("Silakan pilih ukuran terlebih dahulu", true);
-      return;
-    }
+      const productName = document.querySelector(".product-name").textContent;
+      const productPrice = document.querySelector(".current-price").textContent;
+      const productImage = document.querySelector(".product-main-image").src;
+      const selectedSize = document.querySelector(
+        ".size-option input:checked"
+      )?.value;
+      const quantity =
+        parseInt(document.querySelector(".quantity-input").value) || 1;
 
-    addToCart({
-      name: productName,
-      price: productPrice,
-      image: productImage,
-      size: selectedSize,
-      quantity: quantity
+      if (!selectedSize) {
+        const sizeError = document.querySelector(".size-error-message");
+        sizeError.textContent = "Silakan pilih ukuran";
+        sizeError.style.display = "block";
+        showNotification("Silakan pilih ukuran terlebih dahulu", true);
+        return;
+      }
+
+      addToCart({
+        name: productName,
+        price: productPrice,
+        image: productImage,
+        size: selectedSize,
+        quantity: quantity,
+      });
     });
-  });
 
   // Add to cart from product boxes
-  document.querySelectorAll(".box-text a").forEach(button => {
-    button.addEventListener("click", function(e) {
+  document.querySelectorAll(".box-text a").forEach((button) => {
+    button.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -1006,7 +1321,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const product = {
         name: box.querySelector("h3").textContent,
         price: box.querySelector(".title-price span").textContent,
-        image: box.querySelector("img").src
+        image: box.querySelector("img").src,
       };
 
       addToCart(product);
@@ -1032,6 +1347,29 @@ document.addEventListener("DOMContentLoaded", function () {
   let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
   const productsContainer = document.querySelector(".products-content");
   let productBoxes = document.querySelectorAll(".box");
+
+  // Notification function
+  function showNotification(message, isError = false) {
+    // Remove old notification if exists
+    const oldNotification = document.querySelector('.notification');
+    if (oldNotification) {
+      oldNotification.remove();
+    }
+
+    // Create new notification element
+    const notification = document.createElement("div");
+    notification.className = `notification ${isError ? 'error' : ''}`;
+    notification.textContent = message;
+
+    // Append notification to the body
+    document.body.appendChild(notification);
+
+    // Add animation and remove after 5 seconds
+    setTimeout(() => {
+      notification.style.animation = "slideOut 0.5s ease-out";
+      setTimeout(() => notification.remove(), 500); // Wait for fade-out animation to complete
+    }, 5000);
+  }
 
   // Store original positions of all products
   const originalPositions = Array.from(productBoxes).map((box) => {
@@ -1127,6 +1465,8 @@ document.addEventListener("DOMContentLoaded", function () {
   function attachEventListeners() {
     productBoxes.forEach((box) => {
       const heartIcon = box.querySelector(".wishlist");
+      const saleBadge = box.querySelector(".badge.sale");
+
       if (heartIcon) {
         // Remove existing listener to prevent duplicates
         heartIcon.replaceWith(heartIcon.cloneNode(true));
@@ -1136,15 +1476,24 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       }
 
-      // Maintain click handler for the entire box
-      box.onclick = function (e) {
-        if (
-          !e.target.closest(".wishlist") &&
-          !e.target.closest('a[title="Add to Cart"]')
-        ) {
-          window.location.href = "productDetail.html";
-        }
-      };
+      // Handle click on products with "SALE" badge
+      if (saleBadge) {
+        box.style.opacity = "0.6"; 
+        box.addEventListener("click", function (e) {
+          e.preventDefault(); // Prevent default behavior
+          showNotification("Maaf, produk ini telah habis terjual.", true); // Show custom notification
+        });
+      } else {
+        // Normal click behavior for other products
+        box.onclick = function (e) {
+          if (
+            !e.target.closest(".wishlist") &&
+            !e.target.closest('a[title="Add to Cart"]')
+          ) {
+            window.location.href = "productDetail.html";
+          }
+        };
+      }
     });
   }
 
@@ -1181,7 +1530,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Add CSS for badges and stars
+  // Add CSS for badges, stars, and notifications
   const style = document.createElement("style");
   style.textContent = `
     .badge {
@@ -1221,6 +1570,44 @@ document.addEventListener("DOMContentLoaded", function () {
       font-size: 0.8rem;
       color: #777;
       margin-left: 5px;
+    }
+
+    /* Notification styles */
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(33, 213, 84, 0.8);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 14px;
+      opacity: 1;
+      animation: slideIn 0.5s ease-in-out;
+      z-index: 1000;
+    }
+    .notification.error {
+      background: #FF4D4D; /* Red background for error messages */
+    }
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    @keyframes slideOut {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(100%);
+        opacity: 0;
+      }
     }
   `;
   document.head.appendChild(style);
@@ -1431,4 +1818,3 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 //
-

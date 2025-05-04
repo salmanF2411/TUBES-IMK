@@ -52,8 +52,8 @@
     background: #4CAF50;
     }
     .box:nth-child(2)::after {
-    content: "SALE";
-    background: #FF5722;
+      content: "NEW";
+      background: #4CAF50;
     }
   </style>
 
@@ -190,15 +190,15 @@
                 <span>Bank BCA</span>
               </div>
               <div class="bank-option" data-bank="mandiri">
-                <img src="assets/images/bca.jpg" alt="Mandiri">
+                <img src="assets/images/mandiri.jpg" alt="Mandiri">
                 <span>Bank Mandiri</span>
               </div>
               <div class="bank-option" data-bank="bri">
-                <img src="assets/images/bca.jpg" alt="BRI">
+                <img src="assets/images/bri.jpg" alt="BRI">
                 <span>Bank BRI</span>
               </div>
               <div class="bank-option" data-bank="bni">
-                <img src="assets/images/bca.jpg" alt="BNI">
+                <img src="assets/images/bni.jpg" alt="BNI">
                 <span>Bank BNI</span>
               </div>
             </div>
@@ -469,7 +469,7 @@
 
       <div class="popular-content">
         <div onclick="window.location.href='productDetail.html';" class="box">
-          <img src="assets/images/product-1.png" alt="Sport Shoes" />
+          <img src="assets/images/g1.png" alt="Sport Shoes" />
         
 
           <div class="box-text">
@@ -492,12 +492,12 @@
         </div>
 
         <div class="box">
-          <img src="assets/images/product-2.png" alt="Running Shoes" />
+          <img src="assets/images/g2.png" alt="Running Shoes" />
           <!-- <i title="Love this Item?" class="ri-heart-3-line wishlist"></i> -->
 
           <div class="box-text">
             <div class="title-price">
-              <h3>Running Shoes</h3>
+              <h3>Running</h3>
               <span>Rp 20.000</span>
               <div class="stars">
                 <i class="ri-star-fill"></i>
@@ -515,7 +515,7 @@
         </div>
 
         <div class="box">
-          <img src="assets/images/product-3.png" alt="Casual Shoes" />
+          <img src="assets/images/g3.png" alt="Casual Shoes" />
           <!-- <i title="Love this Item?" class="ri-heart-3-line wishlist"></i> -->
 
           <div class="box-text">
@@ -538,7 +538,7 @@
         </div>
 
         <div class="box">
-          <img src="assets/images/product-4.png" alt="Basketball Shoes" />
+          <img src="assets/images/g4.png" alt="Basketball Shoes" />
           <!-- <i title="Love this Item?" class="ri-heart-3-line wishlist"></i> -->
 
           <div class="box-text">
@@ -572,27 +572,23 @@
       <div class="about-text">
         <h2>About Us</h2>
         <p>
-          Lorem ipsum <strong>dolor sit</strong> amet consectetur,
-          <strong>adipisicing elit. </strong> Cupiditate repudiandae voluptate
-          beatae a voluptas fugiat culpa? Animi consectetur blanditiis rem.
+          HypeKicks <strong>is your ultimate destination</strong> for premium sneakers,
+          <strong>where style meets comfort. </strong> We bring you the latest trends and exclusive collections that elevate your footwear game.
         </p>
         <div class="features">
           <i class="ri-checkbox-circle-fill"
             ><span
-              ><strong>Redefining Style:</strong> Established to deliver
-              footwear that complements every occasion.</span
+              ><strong>Sneaker Revolution:</strong> Dedicated to bringing you the most hyped and exclusive kicks in the market.</span
             ></i
           >
           <i class="ri-checkbox-circle-fill"
             ><span
-              ><strong>Expert Craftsmanship:</strong> Premium collections
-              designed and crafted by skilled artisans.</span
+              ><strong>Authenticity Guaranteed:</strong> Every pair is 100% authentic and carefully verified by our experts.</span
             ></i
           >
           <i class="ri-checkbox-circle-fill"
             ><span
-              ><strong>Sustainability at Heart:</strong> Commitment to
-              eco-friendly practices in all our designs.</span
+              ><strong>Fast & Secure:</strong> Get your dream sneakers delivered quickly with our premium shipping service.</span
             ></i
           >
         </div>
@@ -764,11 +760,12 @@
       <div class="footer-box">
         <h3>Payment Methods</h3>
         <div class="payment-icons">
-          <img src="assets/images/bca.jpg" alt="Visa" title="Visa">
-          <img src="assets/images/bca.jpg" alt="Mastercard" title="Mastercard">
-          <img src="assets/images/bca.jpg" alt="PayPal" title="PayPal">
-          <img src="assets/images/bca.jpg" alt="OVO" title="OVO">
-          <img src="assets/images/bca.jpg" alt="DANA" title="DANA">
+          <img src="assets/images/bca.jpg" alt="BCA" title="BCA">
+          <img src="assets/images/bri.jpg" alt="BRI" title="BRI">
+          <img src="assets/images/bni.jpg" alt="BNI" title="BNI">
+          <img src="assets/images/mandiri.jpg" alt="MANDIRI" title="MANDIRI">
+          <img src="assets/images/ovo.jpg" alt="OVO" title="OVO">
+          <img src="assets/images/dana.jpg" alt="DANA" title="DANA">
         </div>
       </div>
     </section>
@@ -784,6 +781,17 @@
     <button class="scroll-top"><i class="ri-arrow-up-line"></i></button>
 
     <!-- scrol top end -->
+
+    <div id="custom-confirm-modal" class="confirmation-modal">
+      <div class="confirmation-content">
+        <h3>Konfirmasi Pembayaran</h3>
+        <p>Apakah Anda yakin ingin melanjutkan pembayaran ini?</p>
+        <div class="confirmation-actions">
+          <button id="confirm-cancel" class="btn btn-secondary">Batal</button>
+          <button id="confirm-ok" class="btn btn-primary">Ya, Lanjutkan</button>
+        </div>
+      </div>
+    </div>
 
     <!-- js -->
 
