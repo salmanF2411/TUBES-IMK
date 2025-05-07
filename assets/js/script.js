@@ -455,64 +455,10 @@ scrollTopBtn.addEventListener("click", () => {
 // ====== Scroll Top Button Functionality End ======
 
 // ====== Email JS Start ======
-const contactForm = document.querySelector("#contact-form"),
-  contactName = document.querySelector("#user-name"),
-  contactEmail = document.querySelector("#user-email"),
-  contactMessage = document.querySelector("#user-message"),
-  successMessage = document.querySelector("#success-message");
-
-const sendEmail = (e) => {
-  e.preventDefault();
-
-  if (
-    contactName.value === "" ||
-    contactEmail.value === "" ||
-    contactMessage.value === ""
-  ) {
-    successMessage.classList.remove("color-green");
-    successMessage.classList.add("color-red");
-    successMessage.textContent = "Please fill in all the fields.";
-  } else {
-    emailjs
-      .sendForm(
-        "service_clo5v4r", // email js service id
-        "template_mx3gkg6", //email js template id
-        contactForm,
-        "2qaJ-eLkH7jW0CFHZ"
-      )
-      .then(
-        () => {
-          successMessage.classList.remove("color-red");
-          successMessage.classList.add("color-green");
-          successMessage.textContent = "Message sent successfully!";
-
-          setTimeout(() => {
-            successMessage.textContent = "";
-          }, 5000);
-        },
-        (error) => {
-          alert("ops! salah, coba lagi.", error);
-        }
-      );
-
-    contactName.value = "";
-    contactEmail.value = "";
-    contactMessage.value = "";
-  }
-};
+// Initialize EmailJS dengan User ID Anda
 
 // ====== Email JS End ======
 
-// function showProductDetails(title, price, image) {
-//   document.getElementById('product-title').innerText = title;
-//   document.getElementById('product-price').innerText = price;
-//   document.getElementById('product-image').src = image;
-//   document.getElementById('product-detail').style.display = 'flex';
-// }
-
-// function closeProductDetails() {
-//   document.getElementById('product-detail').style.display = 'none';
-// }
 
 // Search
 const searchInput = document.getElementById("search");
@@ -554,8 +500,15 @@ searchInput.addEventListener("keypress", (e) => {
 document.addEventListener("DOMContentLoaded", function () {
   const isLoggedIn = checkLogin();
   const userCartKey = isLoggedIn ? `cart_${currentUser?.email}` : "guest_cart";
+  const userTransactionKey = isLoggedIn ? `transactions_${currentUser?.email}` : null;
+  
   let cart = isLoggedIn
     ? JSON.parse(localStorage.getItem(userCartKey)) || []
+    : [];
+
+  // Load transactions from localStorage
+  let transactions = isLoggedIn && userTransactionKey 
+    ? JSON.parse(localStorage.getItem(userTransactionKey)) || []
     : [];
 
   // Payment method variables
@@ -581,6 +534,49 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeAccountBtn = document.querySelector(".close-account");
   const bankOptions = document.querySelectorAll(".bank-option");
   const confirmBtn = document.querySelector(".confirm-payment");
+  const historyTabBtn = document.querySelector(".history-tab");
+  const cartTabBtn = document.querySelector(".cart-tab");
+  const cartFooter = document.querySelector(".cart-footer");
+  const cartTitle = document.querySelector(".cart-title");
+
+  // Toggle between cart and history views
+  let currentView = 'cart'; // 'cart' or 'history'
+
+  function setupTabButtons() {
+    if (!historyTabBtn || !cartTabBtn) return;
+    
+    historyTabBtn.addEventListener("click", function(e) {
+      e.preventDefault();
+      currentView = 'history';
+      updateCartDisplay();
+      cartTabBtn.classList.remove("active");
+      historyTabBtn.classList.add("active");
+      cartTitle.textContent = "Riwayat Pesanan";
+      cartFooter.style.display = "none";
+    });
+    
+    cartTabBtn.addEventListener("click", function(e) {
+      e.preventDefault();
+      currentView = 'cart';
+      updateCartDisplay();
+      historyTabBtn.classList.remove("active");
+      cartTabBtn.classList.add("active");
+      cartTitle.textContent = "Keranjang Anda";
+      cartFooter.style.display = "flex";
+    });
+  }
+
+  // Save transaction to history
+  function saveTransaction(transactionData) {
+    if (!isLoggedIn) return;
+    
+    transactions.unshift(transactionData); // Add new transaction to beginning
+    if (transactions.length > 10) {
+      transactions = transactions.slice(0, 10); // Keep only last 10 transactions
+    }
+    
+    localStorage.setItem(userTransactionKey, JSON.stringify(transactions));
+  }
 
   // Toggle cart visibility
   function toggleCart(open = false) {
@@ -671,8 +667,19 @@ document.addEventListener("DOMContentLoaded", function () {
     if (cartContainer && cartItemsContainer) {
       cartItemsContainer.innerHTML = "";
 
+      if (currentView === 'history') {
+        showTransactionHistory();
+        return;
+      }
+
       if (cart.length === 0) {
-        cartItemsContainer.innerHTML = `<p class="empty-cart-message">Keranjang belanja kosong</p>`;
+        cartItemsContainer.innerHTML = `
+          <div class="empty-cart">
+            <i class="ri-shopping-cart-line"></i>
+            <p>Keranjang belanja kosong</p>
+            <a href="products.html" class="btn">Belanja Sekarang</a>
+          </div>
+        `;
         document.querySelector(".total h3").textContent = "0 Items";
         document.querySelector(".total span").textContent = "Total Rp. 0";
         saveCartToStorage();
@@ -761,6 +768,342 @@ document.addEventListener("DOMContentLoaded", function () {
     saveCartToStorage();
   }
 
+   // Show transaction history
+   function showTransactionHistory() {
+    if (!isLoggedIn || transactions.length === 0) {
+      cartItemsContainer.innerHTML = `
+        <div class="empty-history">
+          <i class="ri-time-line"></i>
+          <p>Belum ada riwayat transaksi</p>
+          <a href="products.html" class="btn">Belanja Sekarang</a>
+        </div>
+      `;
+      return;
+    }
+
+    transactions.forEach((transaction, index) => {
+      const transactionEl = document.createElement("div");
+      transactionEl.className = "transaction-item";
+      transactionEl.innerHTML = `
+        <div class="transaction-header">
+          <div class="transaction-id">#${String(index + 1).padStart(3, '0')}</div>
+          <div class="transaction-date-status">
+            <span class="transaction-date">${transaction.date}</span>
+            <span class="transaction-status">
+              <i class="ri-checkbox-circle-fill"></i> Selesai
+            </span>
+          </div>
+          <i class="ri-delete-bin-line delete-transaction" data-index="${index}"></i>
+        </div>
+        <div class="transaction-products">
+          ${transaction.items.map(item => `
+            <div class="transaction-product">
+              <img src="${item.image}" alt="${item.name}">
+              <div class="product-info">
+                <h4>${item.name}</h4>
+                <div class="product-meta">
+                  <span>${item.size ? 'Ukuran: ' + item.size : ''}</span>
+                  <span>Qty: ${item.quantity}</span>
+                </div>
+              </div>
+              <div class="product-price">${item.price}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="transaction-footer">
+          <div class="payment-method">
+            <i class="ri-bank-card-line"></i>
+            <div>
+              <span class="method">${transaction.paymentMethod}</span>
+              ${transaction.bank ? `<span class="bank">${transaction.bank}</span>` : ''}
+            </div>
+          </div>
+          <div class="transaction-total">
+            <span>Total</span>
+            <span class="amount">Rp ${transaction.total.toLocaleString("id-ID")}</span>
+          </div>
+        </div>
+        <div class="transaction-address">
+          <i class="ri-map-pin-line"></i>
+          <span>${transaction.address}</span>
+        </div>
+      `;
+      cartItemsContainer.appendChild(transactionEl);
+    });
+
+    document.querySelectorAll(".delete-transaction").forEach(btn => {
+      btn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        const index = parseInt(this.getAttribute("data-index"));
+        deleteTransaction(index);
+      });
+    });
+
+    // Add styles for transaction history
+    const style = document.createElement('style');
+    style.textContent = `
+      .transaction-item {
+        background: white;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        border: 1px solid #f0f0f0;
+      }
+      
+      .transaction-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #f5f5f5;
+      }
+      
+      .transaction-id {
+        font-weight: 600;
+        color: #666;
+        font-size: 14px;
+      }
+      
+      .transaction-date-status {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+      
+      .transaction-date {
+        font-size: 12px;
+        color: #888;
+      }
+      
+      .transaction-status {
+        font-size: 12px;
+        color: #4CAF50;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      
+      .transaction-status i {
+        font-size: 14px;
+      }
+      
+      .transaction-products {
+        margin-bottom: 12px;
+      }
+      
+      .transaction-product {
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #f9f9f9;
+      }
+      
+      .transaction-product:last-child {
+        border-bottom: none;
+      }
+      
+      .transaction-product img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-right: 12px;
+        border: 1px solid #eee;
+      }
+      
+      .product-info {
+        flex: 1;
+      }
+      
+      .product-info h4 {
+        font-size: 14px;
+        margin: 0 0 6px;
+        color: #333;
+        font-weight: 500;
+      }
+      
+      .product-meta {
+        display: flex;
+        gap: 10px;
+        font-size: 12px;
+        color: #888;
+      }
+      
+      .product-price {
+        font-weight: 600;
+        color: #ff6b6b;
+        font-size: 14px;
+        min-width: 80px;
+        text-align: right;
+      }
+      
+      .transaction-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-top: 1px dashed #eee;
+        border-bottom: 1px dashed #eee;
+        margin-bottom: 12px;
+      }
+      
+      .payment-method {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+      }
+      
+      .payment-method i {
+        color: #666;
+        font-size: 16px;
+      }
+      
+      .payment-method .method {
+        font-weight: 500;
+        color: #333;
+        display: block;
+      }
+      
+      .payment-method .bank {
+        color: #666;
+        font-size: 11px;
+        display: block;
+      }
+      
+      .transaction-total {
+        text-align: right;
+      }
+      
+      .transaction-total span:first-child {
+        font-size: 12px;
+        color: #888;
+        display: block;
+      }
+      
+      .transaction-total .amount {
+        font-weight: 600;
+        color: #333;
+        font-size: 16px;
+      }
+      
+      .transaction-address {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 12px;
+        color: #666;
+      }
+      
+      .transaction-address i {
+        color: #888;
+        font-size: 14px;
+        margin-top: 2px;
+      }
+      
+      .empty-history {
+        text-align: center;
+        padding: 30px 0;
+        color: #888;
+      }
+      
+      .empty-history i {
+        font-size: 50px;
+        margin-bottom: 10px;
+        display: block;
+        color: #ddd;
+      }
+      
+      .empty-history p {
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+      
+      .empty-history .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background:rgb(11, 9, 9);
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 500;
+      }z
+      
+      .empty-cart {
+        text-align: center;
+        padding: 30px 0;
+        color: #888;
+      }
+      
+      .empty-cart i {
+        font-size: 50px;
+        margin-bottom: 10px;
+        display: block;
+        color: #ddd;
+      }
+      
+      .empty-cart p {
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+      
+      .empty-cart .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background:rgb(12, 10, 10);
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      
+      .cart-tabs {
+        display: flex;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 15px;
+        cursor: pointer;
+      }
+      
+      .cart-tab, .history-tab {
+        flex: 1;
+        padding: 10px;
+        text-align: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+        color: #666;
+        border-bottom: 2px solid transparent;
+        transition: all 0.2s;
+      }
+      
+      .cart-tab.active, .history-tab.active {
+        color: #ff6b6b;
+        border-bottom: 2px solid #ff6b6b;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function deleteTransaction(index) {
+    if (!checkLogin()) {
+      showLoginRequired();
+      return;
+    }
+  
+    if (index >= 0 && index < transactions.length) {
+      transactions.splice(index, 1);
+      localStorage.setItem(userTransactionKey, JSON.stringify(transactions));
+      
+      // Tampilkan notifikasi penghapusan berhasil
+      showNotification("Riwayat Transaksi berhasil dihapus", false, true);
+      
+      updateCartDisplay();
+    }
+  }
+
   function saveCartToStorage() {
     const userCartKey = checkLogin()
       ? `cart_${currentUser.email}`
@@ -822,12 +1165,22 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Notification system
-  function showNotification(message, isError = false) {
+  function showNotification(message, isError = false, isDelete = false) {
     const notification = document.createElement("div");
-    notification.className = `notification ${isError ? "error" : ""}`;
-    notification.innerHTML = `<span>${message}</span>`;
+    notification.className = `notification ${isError ? "error" : ""} ${isDelete ? "delete" : ""}`;
+    
+    if (isDelete) {
+      notification.innerHTML = `
+        <div class="notification-content">
+          <i class="ri-checkbox-circle-fill"></i>
+          <span>${message}</span>
+        </div>
+      `;
+    } else {
+      notification.innerHTML = `<span>${message}</span>`;
+    }
+    
     document.body.appendChild(notification);
-
     notification.style.position = "fixed";
     notification.style.bottom = "20px";
     notification.style.right = "20px";
@@ -841,6 +1194,29 @@ document.addEventListener("DOMContentLoaded", function () {
     notification.style.backgroundColor = isError ? "#ff5252" : "#4CAF50";
     notification.style.color = "white";
 
+    // Tambahkan styling khusus untuk notifikasi delete
+  const deleteStyle = document.createElement('style');
+  deleteStyle.textContent = `
+    .notification.delete {
+      background: linear-gradient(135deg, #ff6b6b, #ff5252);
+      padding: 15px 25px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .notification.delete .notification-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .notification.delete i {
+      font-size: 20px;
+    }
+  `;
+  document.head.appendChild(deleteStyle);
+
     setTimeout(() => {
       notification.style.transform = "translateX(0)";
       notification.style.opacity = "1";
@@ -850,6 +1226,11 @@ document.addEventListener("DOMContentLoaded", function () {
       notification.style.transform = "translateX(100%)";
       notification.style.opacity = "0";
       setTimeout(() => notification.remove(), 300);
+    }, 2000);
+
+    setTimeout(() => {
+      notification.remove();
+      deleteStyle.remove();
     }, 2000);
   }
 
@@ -1517,6 +1898,28 @@ document.addEventListener("DOMContentLoaded", function () {
               return sum + price * item.quantity;
             }, 0);
 
+            // Save transaction to history
+            const transactionData = {
+              date: new Date().toLocaleString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+              }),
+              items: [...cart],
+              paymentMethod: selectedPaymentMethod === 'bank' 
+                ? 'Transfer Bank' 
+                : selectedPaymentMethod === 'cod' 
+                  ? 'COD' 
+                  : 'E-Wallet',
+              bank: selectedPaymentMethod === 'bank' ? selectedBank.name : null,
+              total: total,
+              address: address
+            };
+            
+            saveTransaction(transactionData);
+
             // Show success notification
             const successNotification = document.createElement("div");
             successNotification.className = "payment-success-notification";
@@ -1581,6 +1984,11 @@ document.addEventListener("DOMContentLoaded", function () {
             // Close modals
             accountModal.classList.remove("active");
             paymentModal.classList.remove("active");
+
+            // Switch to history tab after payment
+            if (historyTabBtn) {
+              historyTabBtn.click();
+            }
 
             // Remove elements after animation
             setTimeout(() => {
@@ -1659,6 +2067,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelector(".btn")?.addEventListener("click", processPayment);
 
   // Initialize cart display
+  setupTabButtons();
   updateCartDisplay();
 });
 
